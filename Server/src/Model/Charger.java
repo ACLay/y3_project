@@ -12,7 +12,7 @@ import org.jscience.physics.amount.Amount;
 import Model.connectors.Connector;
 
 
-public class Node {
+public class Charger {
 
 	//device id (32 hex digits, 128 bits), unique
 	private String chargeDeviceID;
@@ -32,7 +32,7 @@ public class Node {
 
 	private Amount<Power> power; //in Watts, or Joules/sec
 
-	public Node(String id, String ref, String name, LatLong coordinates, String locationShort, String locationLong, Collection<Connector> connectors){
+	public Charger(String id, String ref, String name, LatLong coordinates, String locationShort, String locationLong, Collection<Connector> connectors){
 		this.chargeDeviceID = id;
 		this.chargeDeviceRef = ref;
 		this.chargeDeviceName = name;
