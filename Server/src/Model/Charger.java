@@ -30,8 +30,6 @@ public class Charger {
 	//connectors
 	private Collection<Connector> connectors;
 
-	private Amount<Power> power; //in Watts, or Joules/sec
-
 	public Charger(String id, String ref, String name, LatLong coordinates, String locationShort, String locationLong, Collection<Connector> connectors){
 		this.chargeDeviceID = id;
 		this.chargeDeviceRef = ref;
@@ -40,10 +38,6 @@ public class Charger {
 		this.locationShort = locationShort;
 		this.locationLong = locationLong;
 		this.connectors = connectors;
-	}
-
-	public Amount<Power> getPower(){
-		return power;
 	}
 
 	public boolean canCharge(Car car){
