@@ -48,6 +48,12 @@ public class Car {
 	public void addCompatibleConnector(Connector connector){
 		connectors.add(connector);
 	}
+
+	public void addCompatibleConnectors(Collection<Connector> connectors){
+		for(Connector c : connectors){
+			addCompatibleConnector(c);
+		}
+	}
 	
 	public void removeConnector(Connector connector){
 		connectors.remove(connector);
