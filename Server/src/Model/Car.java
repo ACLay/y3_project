@@ -60,7 +60,12 @@ public class Car {
 	}
 	
 	public boolean compatibleWith(Connector connector){
-		return connectors.contains(connector);
+		for(Connector c : connectors){
+			if(c.getType().equals(connector.getType())){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public Collection<Connector> getConnectors(){
