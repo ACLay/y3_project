@@ -49,4 +49,16 @@ public class DbGraph implements Graph {
 		return null;
 	}
 
+	@Override
+	public boolean containsNode(Charger charger) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean containsEdge(Edge edge) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

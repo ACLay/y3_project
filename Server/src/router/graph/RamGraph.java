@@ -58,4 +58,14 @@ public class RamGraph implements Graph {
 		}
 		return desired;
 	}
+
+	@Override
+	public boolean containsNode(Charger charger) {
+		return nodes.contains(charger);
+	}
+
+	@Override
+	public boolean containsEdge(Edge edge) {
+		return edges.contains(edge);
+	}
 }

@@ -21,4 +21,8 @@ public interface Graph {
 	public Collection<Edge> getEdges();
 	
 	public Collection<Edge> getEdgesFrom(Charger edgeStart);
+	
+	public boolean containsNode(Charger charger);
+	
+	public boolean containsEdge(Edge edge);
 }
