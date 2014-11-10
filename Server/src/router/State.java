@@ -1,5 +1,8 @@
 package router;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import javax.measure.quantity.Duration;
 import javax.measure.quantity.Energy;
 import javax.measure.quantity.Length;
@@ -70,5 +73,41 @@ public class State {
 	public Car getCar(){
 		return car;
 	}
-	
+
+	public void printRoute(){
+		State current = this;
+		State predecessor;
+		ArrayList<String> moves = new ArrayList<String>();
+		moves.add("Stats: " + distance.toString() + ", " + time.toString());
+		//for each state in the route
+		do{
+			//get its predecessor
+			predecessor = current.getPrevious();
+			String locationDesc = current.getLocation().getLocationLong();
+			
+			//print the transition
+			if(predecessor == null){
+				moves.add("Start at " + locationDesc);
+			}
+			else if(predecessor.getLocation().equals(current.getLocation())){
+				Amount<Duration> chargeTime = current.getTime().minus(predecessor.getTime());
+				Amount<Energy> chargedBy = current.getEnergy().minus(predecessor.getEnergy());
+				moves.add("Charge at " + locationDesc + " for " + chargeTime.toString() + ", " + chargedBy.toString());
+			}
+			else {
+				Amount<Duration> travelTime = current.getTime().minus(predecessor.getTime());
+				Amount<Length> travelDistance = current.getDistance().minus(predecessor.getDistance());
+				moves.add("Travel to " + locationDesc + "(" + travelDistance.toString() + ", " + travelTime.toString() + ")");
+			}
+
+			current = predecessor;
+		}while(predecessor != null);
+
+		Collections.reverse(moves);
+		
+		for(String s : moves){
+			System.out.println(s);
+		}
+	}
+
 }
