@@ -37,8 +37,8 @@ public class RouteTest2 {
 		Charger endPoint = new Charger("2","c2","end point",null,"Mt. Doom","Mordor",connectors);
 		nodes.add(startPoint); nodes.add(endPoint);
 		
-		Charger midPoint1 = new Charger("3","c3","midpoint 1",null,"prancing pony","bree", medConns);
-		Charger midPoint2 = new Charger("4","c4","midpoint 2",null,"orthanc","isengard", connectors);
+		Charger midPoint1 = new Charger("3","c3","midpoint 1",null,"prancing pony","bree", connectors);
+		Charger midPoint2 = new Charger("4","c4","midpoint 2",null,"orthanc","isengard", medConns);
 		Charger midPoint3 = new Charger("5","c5","midpoint 3",null,"helms deep","rohan",fastConns);
 		nodes.add(midPoint1); nodes.add(midPoint2); nodes.add(midPoint3);
 		
@@ -53,12 +53,13 @@ public class RouteTest2 {
 		
 		g.addNodes(nodes);
 		g.addEdges(edges);
-		//TODO fix this, we should not go through rohan! Incompatible charger types!
+		
 		Car c = new Car("Shadowfax", Amount.valueOf(900,SI.METER), Amount.valueOf(15, SI.MEGA(SI.JOULE)));
-		c.addCompatibleConnectors(fastConns);
+		c.addCompatibleConnectors(medConns);
 		//check startpoint.cancharge(shadowfax)
 		System.out.println(startPoint.canCharge(c));
 		System.out.println(midPoint1.canCharge(c));
+		System.out.println(midPoint3.canCharge(c));
 		
 		Router r = new Router(g);
 
