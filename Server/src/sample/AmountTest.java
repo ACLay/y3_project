@@ -1,6 +1,7 @@
 package sample;
 
 import javax.measure.quantity.Energy;
+import javax.measure.quantity.Velocity;
 import javax.measure.unit.SI;
 
 import org.jscience.physics.amount.Amount;
@@ -27,8 +28,7 @@ public class AmountTest {
 		System.out.println(e.getEstimatedValue() * 500);
 		
 		//experimenting with units
-		@SuppressWarnings("rawtypes")
-		Amount speed = Amount.valueOf(25, SI.METER).divide(Amount.valueOf(5, SI.SECOND));
+		Amount<Velocity> speed = Amount.valueOf(25, SI.METER).divide(Amount.valueOf(5, SI.SECOND)).to(SI.METERS_PER_SECOND);
 		
 		System.out.println(speed);
 		System.out.println(speed.getUnit());
