@@ -63,7 +63,6 @@ public class RouteTest {
 			endState.printRoute();
 		}
 		
-		System.out.println("Total energy needed:" + c.chargeNeededToTravel(Amount.valueOf(1500, SI.METER)));
 	}
 
 }
