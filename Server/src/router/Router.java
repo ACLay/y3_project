@@ -1,6 +1,7 @@
 package router;
 
-import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 import javax.measure.quantity.Duration;
 import javax.measure.quantity.Energy;
@@ -17,33 +18,32 @@ import Model.Charger;
 public class Router {
 
 	Graph graph;
+	Charger start;
+	Charger finish;
 	
 	public Router(Graph g) {
 		graph = g;
 	}
 	
 	public State route(Charger startpoint, Charger endpoint, Car vehicle){
-		ArrayList<State> q = new ArrayList<State>();
+		
+		start = startpoint; finish = endpoint;
+		
+		PriorityQueue<State> pq = new PriorityQueue<State>(3,new StateTimeComparator());
 		if(!(graph.containsNode(startpoint) && graph.containsNode(endpoint))){
 			return null;
 		}
 		//Assume starting fully charged
 		State state1 = new State(startpoint, Amount.valueOf(0, SI.SECOND), vehicle.getCapacity(), null, Amount.valueOf(0, SI.METER), vehicle);
 		
-		q.add(state1);
+		pq.add(state1);
 		
-		while(!q.isEmpty()){
+		while(!pq.isEmpty()){
 			
-			State n = q.get(0);
-			for(State s : q){
-				if(s.getTime().isLessThan(n.getTime())){
-					n = s;
-				}
-			}
+			State n = pq.poll();
 			if(n.getLocation().equals(endpoint)){
 				return n;
 			}
-			q.remove(n);
 			
 			//System.out.println("Exploring from: " + n.getLocation().getLocationLong() + ". States in queue: " + q.size());
 			
@@ -68,14 +68,14 @@ public class Router {
 							time = charged.getTime().plus(e.getTravelTime());
 							charge = charged.getEnergy().minus(chargeNeeded);
 							State low = new State(e.getEndPoint(),time,charge,charged,distance,vehicle);
-							q.add(low);
+							pq.add(low);
 						}
 					} else {
 						distance = n.getDistance().plus(e.getDistance());
 						time = n.getTime().plus(e.getTravelTime());
 						charge = n.getEnergy().minus(chargeNeeded);
 						State low = new State(e.getEndPoint(),time,charge,n,distance,vehicle);
-						q.add(low);
+						pq.add(low);
 					}
 					
 					//add new state with full charge
@@ -93,7 +93,7 @@ public class Router {
 						time = chargedState.getTime().plus(e.getTravelTime());
 						charge = chargedState.getEnergy().minus(chargeNeeded);
 						State high = new State(e.getEndPoint(),time,charge,chargedState,distance,vehicle);
-						q.add(high);
+						pq.add(high);
 					}
 				}
 			}
@@ -101,6 +101,14 @@ public class Router {
 		}
 		
 		return null;
+	}
+	
+	static class StateTimeComparator implements Comparator<State>{
+		@Override
+		public int compare(State o1, State o2) {
+			return o1.getTime().compareTo(o2.getTime());
+		}
+		
 	}
 	
 }
