@@ -29,6 +29,8 @@ public class RouteTest2 {
 		connectors.add(new Connector(Type.IEC_TYPE_3, Amount.valueOf("1750W").to(SI.WATT), Amount.valueOf("250V").to(SI.VOLT), Amount.valueOf("7A").to(SI.AMPERE)));
 		HashSet<Connector> medConns = new HashSet<Connector>();
 		medConns.add(new Connector(Type.IEC_TYPE_3, Amount.valueOf("2500W").to(SI.WATT), Amount.valueOf("250V").to(SI.VOLT), Amount.valueOf("10A").to(SI.AMPERE)));
+		HashSet<Connector> carConns = new HashSet<Connector>();
+		carConns.add(new Connector(Type.IEC_TYPE_3, Amount.valueOf("3250W").to(SI.WATT), Amount.valueOf("250V").to(SI.VOLT), Amount.valueOf("13A").to(SI.AMPERE)));
 		HashSet<Connector> fastConns = new HashSet<Connector>();
 		fastConns.add(new Connector(Type.IEC_TYPE_2, Amount.valueOf("3250W").to(SI.WATT), Amount.valueOf("250V").to(SI.VOLT), Amount.valueOf("13A").to(SI.AMPERE)));
 		
@@ -55,7 +57,7 @@ public class RouteTest2 {
 		g.addEdges(edges);
 		
 		Car c = new Car("Shadowfax", Amount.valueOf(900,SI.METER), Amount.valueOf(15, SI.MEGA(SI.JOULE)));
-		c.addCompatibleConnectors(medConns);
+		c.addCompatibleConnectors(carConns);
 		//check startpoint.cancharge(shadowfax)
 		System.out.println(startPoint.canCharge(c));
 		System.out.println(midPoint1.canCharge(c));
