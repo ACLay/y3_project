@@ -78,7 +78,7 @@ public class State {
 		State current = this;
 		State predecessor;
 		ArrayList<String> moves = new ArrayList<String>();
-		moves.add("Stats: " + distance.toString() + ", " + time.toString());
+		moves.add("Stats: " + stringAmount(distance) + ", " + stringAmount(time) + ", " + stringAmount(car.chargeNeededToTravel(distance)));
 		//for each state in the route
 		do{
 			//get its predecessor
@@ -92,13 +92,15 @@ public class State {
 			else if(predecessor.getLocation().equals(current.getLocation())){
 				Amount<Duration> chargeTime = current.getTime().minus(predecessor.getTime());
 				Amount<Energy> chargedBy = current.getEnergy().minus(predecessor.getEnergy());
-				moves.add("Charge at " + locationDesc + " for " + chargeTime.toString() + ", " + chargedBy.toString());
+				moves.add("Charge at " + locationDesc + " for " + stringAmount(chargeTime) + ", " + stringAmount(chargedBy));
 			}
 			else {
 				Amount<Duration> travelTime = current.getTime().minus(predecessor.getTime());
 				Amount<Length> travelDistance = current.getDistance().minus(predecessor.getDistance());
-				moves.add("Travel to " + locationDesc + "(" + travelDistance.toString() + ", " + travelTime.toString() + ")");
+				moves.add("Travel to " + locationDesc + "(" + stringAmount(travelDistance) + ", " + stringAmount(travelTime) + ")");
 			}
+			
+			
 
 			current = predecessor;
 		}while(predecessor != null);
@@ -110,4 +112,8 @@ public class State {
 		}
 	}
 
+	private String stringAmount(Amount<?> quantity){
+		return Double.toString(Math.ceil(quantity.getMaximumValue())) + quantity.getUnit();
+	}
+	
 }
