@@ -21,7 +21,6 @@ public class Car {
 	//compatible connectors
 	private Collection<Connector> connectors;
 	
-	//USE JSCIENCE.ORG FOR UNIT CONVERSION! - POSSIBLY EVEN COORDINATE PROCESSING...
 	public Car(String model, Amount<Length> range, Amount<Energy> capacity){
 		this.model = model;
 		this.range = range;
