@@ -108,18 +108,6 @@ public class QueueRouter extends Router{
 	}
 
 	protected void addState(State s){
-		/*
-		 * store best time and its charge
-		 * store best charge and its time
-		 * 
-		 * new candidate state
-		 * case: faster than best time
-		 * 		> add candidate
-		 * case: slower than best time, faster than 
-		 * 
-		 */
-		
-		
 		pq.add(s);
 		created++;
 		stored++;

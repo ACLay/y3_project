@@ -11,6 +11,19 @@ public class PrunedQueueRouter extends QueueRouter {
 	
 	protected void addState(State s){
 		
+		/*
+		 * store fastest state for each node
+		 * store chargiest state for each node
+		 * 
+		 * new candidate state
+		 * case: faster than fastest state
+		 * 		> add candidate, set as fastest
+		 * case: chargier than chargiest state
+		 * 		> add candidate, set as chargiest
+		 * case: chargier than fastest, faster than chargiest
+		 * 		> add candidate (fastest may not have enough charge, this may be faster than chargiest)
+		 */
+		
 		Charger location = s.getLocation();
 		
 		boolean addable = false;
