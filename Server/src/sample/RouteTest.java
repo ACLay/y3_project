@@ -8,7 +8,9 @@ import javax.measure.unit.SI;
 import org.jscience.physics.amount.Amount;
 
 import router.Edge;
+import router.QueueRouter;
 import router.Router;
+import router.Scenario;
 import router.State;
 import router.graph.Graph;
 import router.graph.RamGraph;
@@ -53,9 +55,9 @@ public class RouteTest {
 		System.out.println(startPoint.canCharge(c));
 		System.out.println(midPoint1.canCharge(c));
 		
-		Router r = new Router(g);
+		Router r = new QueueRouter();
 
-		State endState = r.route(startPoint, endPoint, c);
+		State endState = r.route(new Scenario(g,startPoint,endPoint,c));
 
 		if(endState == null){
 			System.out.println("Cannot route");

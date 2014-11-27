@@ -24,44 +24,83 @@ public class RouteManhatten {
 	private Graph graph;
 	private Charger start;
 	private Charger end;
-	
+
 	private Random rnd;
-	private Router r;
-	
+
 	private static final Integer[] ampages = {7,10,13};
 
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+
 		RouteManhatten rm = new RouteManhatten();
-		rm.initialize(5,5,1,1,1,4,4);
-		
+		rm.initialize(5,5,1,0,0,4,4);
+
 		System.out.println("Graph built");
-		
+
 		Car car = new Car("Nissan Leaf", Amount.valueOf(900, SI.METER), Amount.valueOf(2000, SI.JOULE));
 		car.addCompatibleConnectors(rm.assembleConnectors(1, false));
-		
+
 		System.out.println("Routing");
+
+		Router[] routers = new Router[]{new QueueRouter(),new PrunedQueueRouter()};
+
+		for(Router router : routers){
+
+			Long startTime = System.currentTimeMillis();
+			State state = rm.route(router, car);
+			Long endTime = System.currentTimeMillis();
+			state.printRoute();
+
+			System.out.println("Routing time:" + Long.toString(endTime - startTime) + "ms");
+			System.out.println("States created:" + router.getCreated());
+			System.out.println("States explored:" + router.getExplored());
+
+		}
+		System.out.println("10 by 10");
+		Router router = new PrunedQueueRouter();
+		rm.initialize(10, 10, 0.5, 1, 1, 9, 9);
 		Long startTime = System.currentTimeMillis();
-		State state = rm.route(car);
+		rm.route(router, car);
 		Long endTime = System.currentTimeMillis();
-		state.printRoute();
-		
+		//state.printRoute();
+
 		System.out.println("Routing time:" + Long.toString(endTime - startTime) + "ms");
-		System.out.println("States created:" + rm.r.created);
-		System.out.println("States explored:" + rm.r.explored);
-		//rm.initialize(100, 50, 0.5, 3, 3, 90, 30);
+		System.out.println("States created:" + router.getCreated());
+		System.out.println("States explored:" + router.getExplored());
+		
+		System.out.println("100 by 100");
+		rm.initialize(100, 100, 0.5, 1, 1, 9, 9);
+		startTime = System.currentTimeMillis();
+		rm.route(router, car);
+		endTime = System.currentTimeMillis();
+		//state.printRoute();
+
+		System.out.println("Routing time:" + Long.toString(endTime - startTime) + "ms");
+		System.out.println("States created:" + router.getCreated());
+		System.out.println("States explored:" + router.getExplored());
+		
+		System.out.println("1000 by 1000");
+		rm.initialize(1000, 1000, 0.5, 1, 1, 9, 9);
+		startTime = System.currentTimeMillis();
+		rm.route(router, car);
+		endTime = System.currentTimeMillis();
+		//state.printRoute();
+
+		System.out.println("Routing time:" + Long.toString(endTime - startTime) + "ms");
+		System.out.println("States created:" + router.getCreated());
+		System.out.println("States explored:" + router.getExplored());
 	}
 
 	public RouteManhatten(){
 		rnd = new Random();
 	}
-	
-	public State route(Car vehicle){
-		r = new Router(graph);
-		return r.route(start, end, vehicle);
+
+	public State route(Router r, Car vehicle){
+
+		Scenario s = new Scenario(graph,start,end,vehicle);
+		return r.route(s);
 	}
-	
+
 	public void initialize(int width, int length, double chargerP, int startI, int startJ, int endI, int endJ){
 		graph = new RamGraph();
 
@@ -98,7 +137,7 @@ public class RouteManhatten {
 				}
 			}
 		}
-		
+
 		start = chargers.get(startI).get(startJ);
 		end = chargers.get(endI).get(endJ);
 
