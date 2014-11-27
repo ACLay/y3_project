@@ -1,6 +1,8 @@
 package router;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.PriorityQueue;
 
 import javax.measure.quantity.Duration;
@@ -18,29 +20,34 @@ import Model.Charger;
 public class Router {
 
 	Graph graph;
-	Charger start;
-	Charger finish;
+	PriorityQueue<State> pq;
+	HashMap<Charger, ArrayList<State>> candidateMapping;
+	
+	long created;
+	long explored;
 	
 	public Router(Graph g) {
 		graph = g;
+		candidateMapping = new HashMap<Charger, ArrayList<State>>();
 	}
 	
 	public State route(Charger startpoint, Charger endpoint, Car vehicle){
 		
-		start = startpoint; finish = endpoint;
+		created = 0;
+		explored = 0;
 		
-		PriorityQueue<State> pq = new PriorityQueue<State>(3,new StateTimeComparator());
+		pq = new PriorityQueue<State>(3,new StateTimeComparator());
 		if(!(graph.containsNode(startpoint) && graph.containsNode(endpoint))){
 			return null;
 		}
 		//Assume starting fully charged
 		State state1 = new State(startpoint, Amount.valueOf(0, SI.SECOND), vehicle.getCapacity(), null, Amount.valueOf(0, SI.METER), vehicle);
 		
-		pq.add(state1);
+		addState(state1);
 		
 		while(!pq.isEmpty()){
 			
-			State n = pq.poll();
+			State n = getState();
 			if(n.getLocation().equals(endpoint)){
 				return n;
 			}
@@ -68,14 +75,14 @@ public class Router {
 							time = charged.getTime().plus(e.getTravelTime());
 							charge = charged.getEnergy().minus(chargeNeeded);
 							State low = new State(e.getEndPoint(),time,charge,charged,distance,vehicle);
-							pq.add(low);
+							addState(low);
 						}
 					} else {
 						distance = n.getDistance().plus(e.getDistance());
 						time = n.getTime().plus(e.getTravelTime());
 						charge = n.getEnergy().minus(chargeNeeded);
 						State low = new State(e.getEndPoint(),time,charge,n,distance,vehicle);
-						pq.add(low);
+						addState(low);
 					}
 					
 					//add new state with full charge
@@ -93,7 +100,7 @@ public class Router {
 						time = chargedState.getTime().plus(e.getTravelTime());
 						charge = chargedState.getEnergy().minus(chargeNeeded);
 						State high = new State(e.getEndPoint(),time,charge,chargedState,distance,vehicle);
-						pq.add(high);
+						addState(high);
 					}
 				}
 			}
@@ -101,6 +108,61 @@ public class Router {
 		}
 		
 		return null;
+	}
+	
+	private void addState(State s){
+		Charger c = s.getLocation();
+		if (candidateMapping.containsKey(c)){
+			ArrayList<State> states = candidateMapping.get(c);
+			for(int i=0; i<states.size(); i++){
+				State queuedState = states.get(i);
+				//if new state is faster, add it
+				//if it has more charge, try adding it before the next state
+				if(s.getTime().isLessThan(queuedState.getTime())){
+					states.add(i, s);
+					pq.add(s);
+					dropRedundant(states,s);
+					created++;
+				} else if (s.getEnergy().isLessThan(queuedState.getEnergy())){
+					//but here it has less energy as well as being slower, so isn't worth expanding
+					break;
+				}
+			}
+		} else {
+			ArrayList<State> states = new ArrayList<State>();
+			states.add(s);
+			candidateMapping.put(c,states);
+			pq.add(s);
+			dropRedundant(states,s);
+			created++;
+		}
+	}
+	
+	private void dropRedundant(ArrayList<State> states, State s){
+		int i = states.indexOf(s);
+		if(i+1 == states.size()){
+			return;
+		}
+		State next = states.get(i+1);
+		
+		while(i+1 != states.size() && s.getEnergy().isGreaterThan(next.getEnergy())){
+			states.remove(next);
+			next = states.get(i+1);
+		}
+		
+	}
+	
+	private State getState(){
+		//TODO is is more efficient to remove processed states from the candidate mapping?
+		State s = pq.poll();
+		Charger c = s.getLocation();
+		ArrayList<State> states = candidateMapping.get(c);
+		states.remove(s);
+		if(states.size() == 0){
+			candidateMapping.remove(c);
+		}
+		explored++;
+		return s;
 	}
 	
 	static class StateTimeComparator implements Comparator<State>{
