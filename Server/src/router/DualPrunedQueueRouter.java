@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import Model.Charger;
 
-public class PrunedQueueRouter extends QueueRouter {
+public class DualPrunedQueueRouter extends QueueRouter {
 	
 	HashMap<Charger, State> fastestStates = new HashMap<Charger, State>();
 	HashMap<Charger, State> chargestStates = new HashMap<Charger, State>();
