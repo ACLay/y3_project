@@ -116,4 +116,24 @@ public class State {
 		return Double.toString(Math.ceil(quantity.getMaximumValue())) + quantity.getUnit();
 	}
 	
+	public boolean isSuperiorTo(State s2){
+		return(isFasterThan(s2) && isChargierThan(s2));
+	}
+	
+	public boolean isFasterThan(State s2){
+		return time.isLessThan(s2.getTime());
+	}
+	
+	public boolean isChargierThan(State s2){
+		return energy.isGreaterThan(s2.getEnergy());
+	}
+	
+	public boolean isInferiorTo(State s2){
+		return s2.isSuperiorTo(this);
+	}
+	
+	public boolean couldBeBetterThan(State s2){
+		return (isFasterThan(s2) || isChargierThan(s2));
+	}
+	
 }
