@@ -26,7 +26,7 @@ public class ManhattenScenario extends Scenario {
 
 		System.out.println("Routing");
 
-		Router[] routers = new Router[]{new QueueRouter(),new PrunedQueueRouter()};
+		Router[] routers = new Router[]{/*new QueueRouter(),*/new TimePrunedQueueRouter(),new ChargePrunedQueueRouter(),new DualPrunedQueueRouter(), new QueuePrunedQueueRouter()};
 
 		for(Router router : routers){
 
@@ -39,7 +39,7 @@ public class ManhattenScenario extends Scenario {
 			System.out.println("States created:" + router.getCreated());
 			System.out.println("States stored:" + router.getStored());
 			System.out.println("States explored:" + router.getExplored());
-
+			System.out.println();
 		}
 
 	}
