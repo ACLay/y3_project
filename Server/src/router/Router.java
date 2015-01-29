@@ -21,4 +21,9 @@ public abstract class Router {
 		return explored;
 	}
 
+	public void printStats(){
+		System.out.println("States created:" + getCreated());
+		System.out.println("States stored:" + getStored());
+		System.out.println("States explored:" + getExplored());
+	}
 }
