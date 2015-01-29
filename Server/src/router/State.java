@@ -78,7 +78,6 @@ public class State {
 		State current = this;
 		State predecessor;
 		ArrayList<String> moves = new ArrayList<String>();
-		moves.add("Stats: " + stringAmount(distance) + ", " + stringAmount(time) + ", " + stringAmount(car.chargeNeededToTravel(distance)));
 		//for each state in the route
 		do{
 			//get its predecessor
@@ -110,6 +109,10 @@ public class State {
 		for(String s : moves){
 			System.out.println(s);
 		}
+	}
+	
+	public void printStats(){
+		System.out.println("Stats: " + stringAmount(distance) + ", " + stringAmount(time) + ", " + stringAmount(car.chargeNeededToTravel(distance)));
 	}
 
 	private String stringAmount(Amount<?> quantity){
