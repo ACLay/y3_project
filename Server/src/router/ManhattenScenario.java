@@ -18,7 +18,7 @@ public class ManhattenScenario extends Scenario {
 
 		Car car = new Car("Nissan Leaf", Amount.valueOf(900, SI.METER), Amount.valueOf(2000, SI.JOULE));
 		
-		ManhattenScenario rm = new ManhattenScenario(5,5,1,0,0,4,4,car);
+		ManhattenScenario rm = new ManhattenScenario(100,100,1,0,0,99,99,car);
 
 		car.addCompatibleConnectors(Connector.getNewCollection(1, false));
 
@@ -26,19 +26,17 @@ public class ManhattenScenario extends Scenario {
 
 		System.out.println("Routing");
 
-		Router[] routers = new Router[]{/*new QueueRouter(),*/new TimePrunedQueueRouter(),new ChargePrunedQueueRouter(),new DualPrunedQueueRouter(), new QueuePrunedQueueRouter()};
+		Router[] routers = new Router[]{/*new QueueRouter(),new TimePrunedQueueRouter(),new ChargePrunedQueueRouter(),*/new DualPrunedQueueRouter(), new QueuePrunedQueueRouter(), new QueuePrunedQueueRouter2()};
 
 		for(Router router : routers){
 
 			Long startTime = System.currentTimeMillis();
 			State state = router.route(rm);
 			Long endTime = System.currentTimeMillis();
-			state.printRoute();
-
+			//state.printRoute();
+			state.printStats();
 			System.out.println("Routing time:" + Long.toString(endTime - startTime) + "ms");
-			System.out.println("States created:" + router.getCreated());
-			System.out.println("States stored:" + router.getStored());
-			System.out.println("States explored:" + router.getExplored());
+			router.printStats();
 			System.out.println();
 		}
 
