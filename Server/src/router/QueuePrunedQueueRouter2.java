@@ -3,12 +3,16 @@ package router;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import Model.Charger;
 
-public class QueuePrunedQueueRouter extends QueueRouter {
+public class QueuePrunedQueueRouter2 extends QueueRouter {
 
 	HashMap<Charger,ArrayList<State>> candidateStates = new HashMap<Charger,ArrayList<State>>();
+	Set<State> inferiors = new HashSet<State>();
+	long dropped = 0;
 	
 	protected void addState(State s){
 		created++;
@@ -35,6 +39,12 @@ public class QueuePrunedQueueRouter extends QueueRouter {
 				pq.add(s);
 				stored++;
 				//TODO remove now inferior states
+				for(int j = i+1; j < candidates.size(); j++){
+					State next = candidates.get(j);
+					if(s.isSuperiorTo(next)){
+						inferiors.add(next);
+					}
+				}
 				break;
 			} else {
 				if(!s.isChargierThan(prev)){
@@ -50,6 +60,22 @@ public class QueuePrunedQueueRouter extends QueueRouter {
 			}
 		}
 		
+		
+		for(State old : inferiors){
+			pq.remove(old);
+			candidates.remove(old);
+			dropped++;
+		}
+		inferiors.clear();
+	}
+	
+	public long getDropped(){
+		return dropped;
+	}
+	
+	public void printStats(){
+		super.printStats();
+		System.out.println("States dropped: " + getDropped());
 	}
 	
 	static class StateDualComparator implements Comparator<State>{
