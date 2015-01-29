@@ -133,9 +133,11 @@ public class QueueRouter extends Router{
 		private Charger endpoint;
 		final Amount<Velocity> maxSpeed = Amount.valueOf(70, NonSI.MILES_PER_HOUR);
 		final Amount<Length> earthRadius = Amount.valueOf(6353, SI.KILOMETRE);
+		private Amount<Power> fastestCharge;
 		
-		public AStarStateTimeComparator(Charger endpoint){
+		public AStarStateTimeComparator(Charger endpoint, Amount<Power> fastestCharge){
 			this.endpoint = endpoint;
+			this.fastestCharge = fastestCharge;
 		}
 		
 		@Override
@@ -146,6 +148,11 @@ public class QueueRouter extends Router{
 			
 			
 			return state1time.compareTo(state2time);
+		}
+		
+		private Amount<Duration> heuristicTime(State s){
+			Amount<Length> distance = haversineDistance(s.getLocation(), endpoint);
+			return travelTime(distance).plus(chargeTime(s,distance));
 		}
 		
 		private Amount<Length> haversineDistance(Charger s1, Charger s2){
@@ -160,10 +167,23 @@ public class QueueRouter extends Router{
 			return earthRadius.times(2*Math.asin(root));
 		}
 		
-		private Amount<Duration> heuristicTime(State s1){
-			Amount<Length> distanceEstimate = haversineDistance(s1.getLocation(),endpoint);
-			Amount<Duration> timeEstimate = distanceEstimate.divide(maxSpeed).to(SI.SECOND);
-			return s1.getTime().plus(timeEstimate);
+		private Amount<Duration> travelTime(Amount<Length> distance){
+			Amount<Duration> timeEstimate = distance.divide(maxSpeed).to(SI.SECOND);
+			
+			return timeEstimate;
+		}
+		
+		private Amount<Duration> chargeTime(State s, Amount<Length> distance){
+			Car vehicle = s.getCar();
+			Amount<Energy> currentCharge = s.getEnergy();
+			Amount<Energy> energyNeeded = vehicle.chargeNeededToTravel(distance);
+			if(currentCharge.isLessThan(energyNeeded)){
+				return Amount.valueOf(0,SI.SECOND);
+			} else {
+				Amount<Energy> excess = energyNeeded.minus(currentCharge);
+				return excess.divide(fastestCharge).to(SI.SECOND);
+			}
+
 		}
 		
 	}
