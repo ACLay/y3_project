@@ -16,51 +16,32 @@ public class QueuePrunedQueueRouter2 extends QueueRouter {
 	
 	protected void addState(State s){
 		created++;
-		//get the chargers candidates, which are kept ordered by time and charge
-		//if new state is faster than a state, add it in place
-		//if it's slower, then only keep trying if its better charged
+		//get the chargers candidates
 		ArrayList<State> candidates;
 		if(candidateStates.containsKey(s.getLocation())){
 			candidates = candidateStates.get(s.getLocation());
 		} else {
 			candidates = new ArrayList<State>();
 			candidateStates.put(s.getLocation(), candidates);
+		}
+		
+		boolean addNewState = true;
+		
+		for(State oldState : candidates){
+			//if there exists a state that the new one is no better than in either stat, the new one shouldn't be added
+			if(!s.isFasterThan(oldState) && !s.isChargierThan(oldState)){
+				addNewState = false;
+			//if there exists an old state with no better stats than the new one, the old one should be dropped
+			} else if(!oldState.isFasterThan(s) && !oldState.isChargierThan(s)){
+				inferiors.add(oldState);
+			}
+		}
+		
+		if(addNewState){
 			pq.add(s);
 			candidates.add(s);
 			stored++;
-			return;
 		}
-		
-		for(int i=0; i < candidates.size(); i++){
-			State prev = candidates.get(i);
-			if(s.isFasterThan(prev)){
-				//add in place
-				candidates.add(i, s);
-				pq.add(s);
-				stored++;
-				//remove now inferior states
-				for(int j = i+1; j < candidates.size(); j++){
-					State next = candidates.get(j);
-					//if next is not better in either stat
-					if(!next.isChargierThan(s) && !next.isFasterThan(s)){
-						inferiors.add(next);
-					}
-				}
-				break;
-			} else {
-				if(!s.isChargierThan(prev)){
-					break;
-				}
-			}
-			if(i == candidates.size() - 1){
-				if(s.isChargierThan(prev)){
-					candidates.add(s);
-					pq.add(s);
-					stored++;
-				}
-			}
-		}
-		
 		
 		for(State old : inferiors){
 			pq.remove(old);
