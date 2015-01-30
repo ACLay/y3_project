@@ -8,7 +8,7 @@ import java.util.Set;
 
 import Model.Charger;
 
-public class QueuePrunedQueueRouter2 extends QueueRouter {
+public class ListPrunedQueueRouter extends QueueRouter {
 
 	HashMap<Charger,ArrayList<State>> candidateStates = new HashMap<Charger,ArrayList<State>>();
 	Set<State> inferiors = new HashSet<State>();

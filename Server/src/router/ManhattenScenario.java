@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.measure.unit.SI;
 
+import org.jscience.geography.coordinates.LatLong;
 import org.jscience.physics.amount.Amount;
 
 import router.graph.RamGraph;
@@ -18,7 +19,7 @@ public class ManhattenScenario extends Scenario {
 
 		Car car = new Car("Nissan Leaf", Amount.valueOf(900, SI.METER), Amount.valueOf(2000, SI.JOULE));
 		
-		ManhattenScenario rm = new ManhattenScenario(100,100,1,0,0,99,99,car);
+		ManhattenScenario rm = new ManhattenScenario(100,100,1,25,25,75,75,car);
 
 		car.addCompatibleConnectors(Connector.getNewCollection(1, false));
 
@@ -26,7 +27,7 @@ public class ManhattenScenario extends Scenario {
 
 		System.out.println("Routing");
 
-		Router[] routers = new Router[]{/*new QueueRouter(),new TimePrunedQueueRouter(),new ChargePrunedQueueRouter(),*/new DualPrunedQueueRouter(), new QueuePrunedQueueRouter(), new QueuePrunedQueueRouter2()};
+		Router[] routers = new Router[]{/*new QueueRouter(),new TimePrunedQueueRouter(),new ChargePrunedQueueRouter(),new DualPrunedQueueRouter(),*/ new QueuePrunedQueueRouter(), new ListPrunedQueueRouter()};
 
 		for(Router router : routers){
 
@@ -52,6 +53,9 @@ public class ManhattenScenario extends Scenario {
 			ArrayList<Charger> row = new ArrayList<Charger>();
 			for(int j=0; j<length; j++){
 				String id = i + "," + j;
+				/*double lat;
+				double lon;
+				LatLong coordinates = LatLong.valueOf(lat, lon, SI.RADIAN);*/
 				row.add(new Charger(id, id, id, null, id, id, Connector.getNewCollection(chargerP, true)));
 			}
 			chargers.add(row);
