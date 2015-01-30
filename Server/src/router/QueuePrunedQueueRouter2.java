@@ -38,10 +38,11 @@ public class QueuePrunedQueueRouter2 extends QueueRouter {
 				candidates.add(i, s);
 				pq.add(s);
 				stored++;
-				//TODO remove now inferior states
+				//remove now inferior states
 				for(int j = i+1; j < candidates.size(); j++){
 					State next = candidates.get(j);
-					if(s.isSuperiorTo(next)){
+					//if next is not better in either stat
+					if(!next.isChargierThan(s) && !next.isFasterThan(s)){
 						inferiors.add(next);
 					}
 				}
