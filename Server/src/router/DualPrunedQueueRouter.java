@@ -6,6 +6,10 @@ import Model.Charger;
 
 public class DualPrunedQueueRouter extends QueueRouter {
 	
+	public DualPrunedQueueRouter(StateTimeComparator comparator) {
+		super(comparator);
+	}
+
 	HashMap<Charger, State> fastestStates = new HashMap<Charger, State>();
 	HashMap<Charger, State> chargestStates = new HashMap<Charger, State>();
 	

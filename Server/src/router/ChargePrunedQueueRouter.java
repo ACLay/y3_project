@@ -6,6 +6,10 @@ import Model.Charger;
 
 public class ChargePrunedQueueRouter extends QueueRouter {
 	
+	public ChargePrunedQueueRouter(StateTimeComparator comparator) {
+		super(comparator);
+	}
+
 	HashMap<Charger, State> chargestStates = new HashMap<Charger, State>();
 	
 	protected void addState(State s){

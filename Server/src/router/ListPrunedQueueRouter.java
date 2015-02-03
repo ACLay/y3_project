@@ -1,7 +1,6 @@
 package router;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,6 +8,10 @@ import java.util.Set;
 import Model.Charger;
 
 public class ListPrunedQueueRouter extends QueueRouter {
+	//TODO remove successors to inferior states
+	public ListPrunedQueueRouter(StateTimeComparator comparator) {
+		super(comparator);
+	}
 
 	HashMap<Charger,ArrayList<State>> candidateStates = new HashMap<Charger,ArrayList<State>>();
 	Set<State> inferiors = new HashSet<State>();
@@ -58,19 +61,6 @@ public class ListPrunedQueueRouter extends QueueRouter {
 	public void printStats(){
 		super.printStats();
 		System.out.println("States dropped: " + getDropped());
-	}
-	
-	static class StateDualComparator implements Comparator<State>{
-		@Override
-		public int compare(State o1, State o2) {
-			int timeComp = o1.getTime().compareTo(o2.getTime());
-			if(timeComp == 0){
-				return o2.getEnergy().compareTo(o1.getEnergy());
-			} else {
-				return timeComp;
-			}
-		}
-
 	}
 	
 

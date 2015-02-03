@@ -1,14 +1,11 @@
 package router;
 
-import java.util.Comparator;
 import java.util.PriorityQueue;
 
 import javax.measure.quantity.Duration;
 import javax.measure.quantity.Energy;
 import javax.measure.quantity.Length;
 import javax.measure.quantity.Power;
-import javax.measure.quantity.Velocity;
-import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
 
 import org.jscience.physics.amount.Amount;
@@ -21,7 +18,12 @@ public class QueueRouter extends Router{
 
 	Graph graph;
 	PriorityQueue<State> pq;
+	StateTimeComparator comparator;
 
+	public QueueRouter(StateTimeComparator comparator){
+		this.comparator = comparator;
+	}
+	
 	@Override
 	public State route(Scenario scenario) {
 		// TODO Auto-generated method stub
@@ -35,7 +37,7 @@ public class QueueRouter extends Router{
 		stored = 0;
 		explored = 0;
 
-		pq = new PriorityQueue<State>(3,new StateTimeComparator());
+		pq = new PriorityQueue<State>(3, comparator);
 		if(!(graph.containsNode(startpoint) && graph.containsNode(endpoint))){
 			return null;
 		}
@@ -120,72 +122,5 @@ public class QueueRouter extends Router{
 		return pq.poll();
 	}
 
-	static class StateTimeComparator implements Comparator<State>{
-		@Override
-		public int compare(State o1, State o2) {
-			return o1.getTime().compareTo(o2.getTime());
-		}
-
-	}
-
-	static class AStarStateTimeComparator implements Comparator<State>{
-
-		private Charger endpoint;
-		final Amount<Velocity> maxSpeed = Amount.valueOf(70, NonSI.MILES_PER_HOUR);
-		final Amount<Length> earthRadius = Amount.valueOf(6353, SI.KILOMETRE);
-		private Amount<Power> fastestCharge;
-		
-		public AStarStateTimeComparator(Charger endpoint, Amount<Power> fastestCharge){
-			this.endpoint = endpoint;
-			this.fastestCharge = fastestCharge;
-		}
-		
-		@Override
-		public int compare(State s1, State s2) {
-			
-			Amount<Duration> state1time = heuristicTime(s1);
-			Amount<Duration> state2time = heuristicTime(s2);
-			
-			
-			return state1time.compareTo(state2time);
-		}
-		
-		private Amount<Duration> heuristicTime(State s){
-			Amount<Length> distance = haversineDistance(s.getLocation(), endpoint);
-			return travelTime(distance).plus(chargeTime(s,distance));
-		}
-		
-		private Amount<Length> haversineDistance(Charger s1, Charger s2){
-			double lat1 = s1.getCoordinates().latitudeValue(SI.RADIAN);
-			double lon1 = s1.getCoordinates().longitudeValue(SI.RADIAN);
-			
-			double lat2 = s2.getCoordinates().latitudeValue(SI.RADIAN);
-			double lon2 = s1.getCoordinates().longitudeValue(SI.RADIAN);
-			
-			double internal = Math.pow(Math.sin((lat2 - lat1)/2), 2) + Math.cos(lat1)*Math.cos(lat2)*Math.pow(Math.sin((lon2 - lon1)/2),2);
-			double root = Math.sqrt(internal);
-			return earthRadius.times(2*Math.asin(root));
-		}
-		
-		private Amount<Duration> travelTime(Amount<Length> distance){
-			Amount<Duration> timeEstimate = distance.divide(maxSpeed).to(SI.SECOND);
-			
-			return timeEstimate;
-		}
-		
-		private Amount<Duration> chargeTime(State s, Amount<Length> distance){
-			Car vehicle = s.getCar();
-			Amount<Energy> currentCharge = s.getEnergy();
-			Amount<Energy> energyNeeded = vehicle.chargeNeededToTravel(distance);
-			if(currentCharge.isLessThan(energyNeeded)){
-				return Amount.valueOf(0,SI.SECOND);
-			} else {
-				Amount<Energy> excess = energyNeeded.minus(currentCharge);
-				return excess.divide(fastestCharge).to(SI.SECOND);
-			}
-
-		}
-		
-	}
 
 }

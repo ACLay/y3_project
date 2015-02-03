@@ -12,6 +12,7 @@ import router.QueueRouter;
 import router.Router;
 import router.Scenario;
 import router.State;
+import router.StateTimeComparator;
 import router.graph.Graph;
 import router.graph.RamGraph;
 import Model.Car;
@@ -55,7 +56,7 @@ public class RouteTest {
 		System.out.println(startPoint.canCharge(c));
 		System.out.println(midPoint1.canCharge(c));
 		
-		Router r = new QueueRouter();
+		Router r = new QueueRouter(new StateTimeComparator());
 
 		State endState = r.route(new Scenario(g,startPoint,endPoint,c));
 

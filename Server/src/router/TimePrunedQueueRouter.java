@@ -6,6 +6,11 @@ import Model.Charger;
 
 public class TimePrunedQueueRouter extends QueueRouter {
 	
+	public TimePrunedQueueRouter(StateTimeComparator comparator) {
+		super(comparator);
+		// TODO Auto-generated constructor stub
+	}
+
 	HashMap<Charger, State> fastestStates = new HashMap<Charger, State>();
 	
 	protected void addState(State s){
