@@ -2,6 +2,7 @@ package router;
 
 import java.util.ArrayList;
 
+import javax.measure.quantity.Power;
 import javax.measure.unit.SI;
 
 import org.jscience.geography.coordinates.LatLong;
@@ -27,7 +28,20 @@ public class ManhattenScenario extends Scenario {
 
 		System.out.println("Routing");
 
-		Router[] routers = new Router[]{/*new QueueRouter(),new TimePrunedQueueRouter(),new ChargePrunedQueueRouter(),new DualPrunedQueueRouter(),*/ new QueuePrunedQueueRouter(), new ListPrunedQueueRouter()};
+		StateTimeComparator tComp = new StateTimeComparator();
+		
+		Amount<Power> fastest = Amount.valueOf(Double.MIN_VALUE, SI.WATT);
+		for(Charger charger : rm.getGraph().getNodes()){
+			Amount<Power> chargerBest = charger.maxChargeOutput(car);
+			if(chargerBest.isGreaterThan(fastest)){
+				fastest = chargerBest;
+			}
+		}
+		
+		AStarStateTimeComparator heurComp = new AStarStateTimeComparator(rm.getFinish(), fastest);
+		DistanceStoringAStarComparator dsComp = new DistanceStoringAStarComparator(rm.getFinish(), fastest);
+		
+		Router[] routers = new Router[]{/*new DualPrunedQueueRouter(tComp), new QueuePrunedQueueRouter(tComp),*/ new ListPrunedQueueRouter(tComp), new ListPrunedQueueRouter(heurComp), new ListPrunedQueueRouter(dsComp)};
 
 		for(Router router : routers){
 
@@ -53,10 +67,10 @@ public class ManhattenScenario extends Scenario {
 			ArrayList<Charger> row = new ArrayList<Charger>();
 			for(int j=0; j<length; j++){
 				String id = i + "," + j;
-				/*double lat;
-				double lon;
-				LatLong coordinates = LatLong.valueOf(lat, lon, SI.RADIAN);*/
-				row.add(new Charger(id, id, id, null, id, id, Connector.getNewCollection(chargerP, true)));
+				double lat = (0.5*i)/6353;
+				double lon = (0.5*j)/6353;
+				LatLong coordinates = LatLong.valueOf(lat, lon, SI.RADIAN);
+				row.add(new Charger(id, id, id, coordinates, id, id, Connector.getNewCollection(chargerP, true)));
 			}
 			chargers.add(row);
 			graph.addNodes(row);
