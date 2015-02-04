@@ -111,4 +111,8 @@ public class Charger {
 		return locationLong;
 	}
 
+	public Collection<Connector> getConnectors(){
+		return connectors;
+	}
+	
 }
