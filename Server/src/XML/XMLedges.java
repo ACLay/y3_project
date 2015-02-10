@@ -15,11 +15,11 @@ public class XMLedges{
 	@XmlElement(name = "Edge")
 	List<XMLedge> chargers = new ArrayList<XMLedge>();
 	
-	public List<XMLedge> getChargers(){
+	public List<XMLedge> getEdges(){
 		return chargers;
 	}
 	
-	public void setChargers(List<XMLedge> chargers){
+	public void setEdges(List<XMLedge> chargers){
 		this.chargers = chargers;
 	}
 }
