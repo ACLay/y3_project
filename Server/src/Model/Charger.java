@@ -114,5 +114,74 @@ public class Charger {
 	public Collection<Connector> getConnectors(){
 		return connectors;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((chargeDeviceID == null) ? 0 : chargeDeviceID.hashCode());
+		result = prime
+				* result
+				+ ((chargeDeviceName == null) ? 0 : chargeDeviceName.hashCode());
+		result = prime * result
+				+ ((chargeDeviceRef == null) ? 0 : chargeDeviceRef.hashCode());
+		result = prime * result
+				+ ((connectors == null) ? 0 : connectors.hashCode());
+		/*result = prime * result
+				+ ((coordinates == null) ? 0 : coordinates.hashCode());*/
+		result = prime * result
+				+ ((locationLong == null) ? 0 : locationLong.hashCode());
+		result = prime * result
+				+ ((locationShort == null) ? 0 : locationShort.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Charger other = (Charger) obj;
+		if (chargeDeviceID == null) {
+			if (other.chargeDeviceID != null)
+				return false;
+		} else if (!chargeDeviceID.equals(other.chargeDeviceID))
+			return false;
+		if (chargeDeviceName == null) {
+			if (other.chargeDeviceName != null)
+				return false;
+		} else if (!chargeDeviceName.equals(other.chargeDeviceName))
+			return false;
+		if (chargeDeviceRef == null) {
+			if (other.chargeDeviceRef != null)
+				return false;
+		} else if (!chargeDeviceRef.equals(other.chargeDeviceRef))
+			return false;
+		if (connectors == null) {
+			if (other.connectors != null)
+				return false;
+		} else if (!connectors.equals(other.connectors))
+			return false;
+		/*if (coordinates == null) {
+			if (other.coordinates != null)
+				return false;
+		} else if (!coordinates.equals(other.coordinates))
+			return false;*/
+		if (locationLong == null) {
+			if (other.locationLong != null)
+				return false;
+		} else if (!locationLong.equals(other.locationLong))
+			return false;
+		if (locationShort == null) {
+			if (other.locationShort != null)
+				return false;
+		} else if (!locationShort.equals(other.locationShort))
+			return false;
+		return true;
+	}
 	
 }
