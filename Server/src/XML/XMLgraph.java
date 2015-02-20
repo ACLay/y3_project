@@ -1,7 +1,9 @@
 package XML;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,6 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.jscience.physics.amount.Amount;
 
 import router.Edge;
+import router.graph.Graph;
 import router.graph.RamGraph;
 import Model.Charger;
 
@@ -25,6 +28,23 @@ public class XMLgraph {
 	XMLChargers chargers;
 	@XmlElement(name = "Edges")
 	XMLedges edges;
+	
+	public XMLgraph(){}
+	public XMLgraph(Graph g){
+		List<XMLcharger> xmlChargers = new ArrayList<XMLcharger>();
+		for(Charger c : g.getNodes()){
+			xmlChargers.add(new XMLcharger(c));
+		}
+		chargers = new XMLChargers();
+		chargers.setChargers(xmlChargers);
+		
+		List<XMLedge> xmlEdges = new ArrayList<XMLedge>();
+		for(Edge e : g.getEdges()){
+			xmlEdges.add(new XMLedge(e));
+		}
+		edges = new XMLedges();
+		edges.setEdges(xmlEdges);
+	}
 	
 	public void setChargers(XMLChargers chargers){
 		this.chargers = chargers;
