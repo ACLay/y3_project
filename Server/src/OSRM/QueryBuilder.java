@@ -4,9 +4,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.measure.unit.NonSI;
-import javax.measure.unit.SI;
 
 import org.jscience.geography.coordinates.LatLong;
+
+import Model.Charger;
 
 public class QueryBuilder {
 
@@ -18,6 +19,10 @@ public class QueryBuilder {
 		this.port = port;
 	}
 	
+	public URL routeBetween(Charger start, Charger end) throws MalformedURLException{
+		return routeBetween(start.getCoordinates(),end.getCoordinates());
+	}
+	
 	public URL routeBetween(LatLong start, LatLong end) throws MalformedURLException{
 		
 		Double lat1 = start.latitudeValue(NonSI.DEGREE_ANGLE);
@@ -26,7 +31,8 @@ public class QueryBuilder {
 		Double lat2 = end.latitudeValue(NonSI.DEGREE_ANGLE);
 		Double lon2 = end.longitudeValue(NonSI.DEGREE_ANGLE);
 		
-		StringBuilder sb = new StringBuilder().append("http://")
+		StringBuilder sb = new StringBuilder()
+		.append("http://")
 		.append(serverName);
 		if(port != null){
 			sb.append(":")
@@ -45,13 +51,5 @@ public class QueryBuilder {
 		return new URL(sb.toString());
 	}
 	
-	public static void main(String[] args){
-		QueryBuilder qb = new QueryBuilder("osrm.mapzen.com/car", null);
-		try {
-			System.out.println(qb.routeBetween(LatLong.valueOf(0, 0, SI.RADIAN), LatLong.valueOf(0.1,0.1, SI.RADIAN)));
-		} catch (MalformedURLException e) {
-			System.err.println("Unable to build valid url");
-		}
-	}
 	
 }
