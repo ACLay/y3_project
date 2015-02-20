@@ -109,19 +109,19 @@ public class Connector{
 		if (current == null) {
 			if (other.current != null)
 				return false;
-		} else if (!current.equals(other.current))
+		} else if (!current.approximates(other.current))
 			return false;
 		if (output == null) {
 			if (other.output != null)
 				return false;
-		} else if (!output.equals(other.output))
+		} else if (!output.approximates(other.output))
 			return false;
 		if (type != other.type)
 			return false;
 		if (voltage == null) {
 			if (other.voltage != null)
 				return false;
-		} else if (!voltage.equals(other.voltage))
+		} else if (!voltage.approximates(other.voltage))
 			return false;
 		return true;
 	}
