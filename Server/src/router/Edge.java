@@ -64,7 +64,7 @@ public class Edge {
 		if (distance == null) {
 			if (other.distance != null)
 				return false;
-		} else if (!distance.equals(other.distance))
+		} else if (!distance.approximates(other.distance))
 			return false;
 		if (endPoint == null) {
 			if (other.endPoint != null)
@@ -79,7 +79,7 @@ public class Edge {
 		if (time == null) {
 			if (other.time != null)
 				return false;
-		} else if (!time.equals(other.time))
+		} else if (!time.approximates(other.time))
 			return false;
 		return true;
 	}
