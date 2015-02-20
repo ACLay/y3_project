@@ -1,7 +1,6 @@
 package router;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
@@ -166,15 +165,5 @@ public class MapRouter extends Router{
 		explored++;
 		return s;
 	}
-	
-	static class StateTimeComparator implements Comparator<State>{
-		@Override
-		public int compare(State o1, State o2) {
-			return o1.getTime().compareTo(o2.getTime());
-		}
-		
-	}
-
-
 	
 }
