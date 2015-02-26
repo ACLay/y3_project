@@ -15,6 +15,9 @@ import org.jscience.physics.amount.Amount;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import XML.GraphIO;
+
+import registry.ChargerLoader;
 import router.Edge;
 import router.graph.Graph;
 import router.graph.RamGraph;
@@ -27,16 +30,23 @@ public class GraphBuilder {
 	public GraphBuilder(QueryBuilder queryBuilder){
 		qb = queryBuilder;
 	}
+	
+	public static void main(String[] args){
+		Collection<Charger> chargers = ChargerLoader.loadFromFile("./edited_registry.xml");
+		GraphBuilder gb = new GraphBuilder(new QueryBuilder("127.0.0.1",5000));
+		Graph graph = gb.buildGraph(chargers);
+		GraphIO.saveGraph(graph, "./generated_graph.xml");
+	}
 
 	public Graph buildGraph(Collection<Charger> chargers){
 		Graph graph = new RamGraph();
 		graph.addNodes(chargers);
 
 		Iterator<Charger> iter1 = chargers.iterator();
-		Iterator<Charger> iter2 = chargers.iterator();
 
 		while(iter1.hasNext()){
 			Charger startPoint = iter1.next();
+			Iterator<Charger> iter2 = chargers.iterator();
 			while(iter2.hasNext()){
 				Charger endPoint = iter2.next();
 				if(!startPoint.equals(endPoint)){
