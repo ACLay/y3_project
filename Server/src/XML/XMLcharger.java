@@ -43,7 +43,7 @@ public class XMLcharger {
 		for(XMLconnector xmlConn : connectors){
 			Connector c = xmlConn.makeConnector();
 			if(c != null){
-				realConnectors.add(xmlConn.makeConnector());
+				realConnectors.add(c);
 			}
 		}
 		
