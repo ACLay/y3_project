@@ -43,6 +43,10 @@ public class XMLconnector {
 				type = t;
 			}
 		}
+		if(type == null){
+			System.err.println("Unrecognised connector type. Check with: grep ConnectorType registry.xml | sort | uniq");
+			return null;
+		}
 		
 		if(ratedOutputkW == null){
 			if(ratedOutputVoltage != null && ratedOutputCurrent != null){
