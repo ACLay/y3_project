@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.measure.quantity.Duration;
 import javax.measure.quantity.Length;
 import javax.measure.quantity.Power;
+import javax.measure.quantity.Velocity;
 
 import org.jscience.physics.amount.Amount;
 
@@ -16,8 +17,8 @@ public class DistanceStoringAStarComparator extends AStarStateTimeComparator{
 	Map<Charger, Amount<Length>> distances = new HashMap<Charger, Amount<Length>>();
 	
 	
-	public DistanceStoringAStarComparator(Charger endpoint, Amount<Power> fastestCharge){
-		super(endpoint,fastestCharge);
+	public DistanceStoringAStarComparator(Charger endpoint, Amount<Velocity> maxSpeed, Amount<Power> fastestCharge){
+		super(endpoint,maxSpeed,fastestCharge);
 	}
 	
 
@@ -28,7 +29,7 @@ public class DistanceStoringAStarComparator extends AStarStateTimeComparator{
 		if(distances.containsKey(s.getLocation())){
 			distance = distances.get(s.getLocation());
 		} else {
-			distance = haversineDistance(s.getLocation(), endpoint);
+			distance = Geography.haversineDistance(s.getLocation(), endpoint);
 			distances.put(s.getLocation(), distance);
 		}
 	

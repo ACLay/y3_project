@@ -3,6 +3,7 @@ package router;
 import java.util.ArrayList;
 
 import javax.measure.quantity.Power;
+import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
 
 import org.jscience.geography.coordinates.LatLong;
@@ -38,8 +39,8 @@ public class ManhattenScenario extends Scenario {
 			}
 		}
 		
-		AStarStateTimeComparator heurComp = new AStarStateTimeComparator(rm.getFinish(), fastest);
-		DistanceStoringAStarComparator dsComp = new DistanceStoringAStarComparator(rm.getFinish(), fastest);
+		AStarStateTimeComparator heurComp = new AStarStateTimeComparator(rm.getFinish(), Amount.valueOf(30, NonSI.MILES_PER_HOUR), fastest);
+		DistanceStoringAStarComparator dsComp = new DistanceStoringAStarComparator(rm.getFinish(), Amount.valueOf(30, NonSI.MILES_PER_HOUR), fastest);
 		
 		Router[] routers = new Router[]{/*new DualPrunedQueueRouter(tComp), new QueuePrunedQueueRouter(tComp),*/ new ListPrunedQueueRouter(tComp), new ListPrunedQueueRouter(heurComp), new ListPrunedQueueRouter(dsComp)};
 
