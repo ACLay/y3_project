@@ -73,7 +73,7 @@ public class ChargerLoader {
 		}
 		Charger c2 = it.next();
 		
-		GraphBuilder gb = new GraphBuilder(new QueryBuilder("127.0.0.1", 5000));
+		GraphBuilder gb = new GraphBuilder(new QueryBuilder("127.0.0.1", 5000), Amount.valueOf(426, SI.KILOMETER));
 		Edge edge;
 		try {
 			edge = gb.makeEdge(c1, c2);
