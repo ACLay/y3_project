@@ -62,15 +62,25 @@ public class ChargerLoader {
 	}
 
 	public static void main(String[] args){
-		Collection<Charger> chargers = loadFromFile("./edited_registry.xml");
+		Collection<Charger> chargers = loadFromFile("./xml/edited_registry.xml");
 		Iterator<Charger> it = chargers.iterator();
+		for(int i=0; i<100; i++){
+			it.next();
+		}
 		Charger c1 = it.next();
+		for(int i=0; i<150; i++){
+			it.next();
+		}
 		Charger c2 = it.next();
 		
-		GraphBuilder gb = new GraphBuilder(new QueryBuilder("osrm.mapzen.com/car", null));
+		GraphBuilder gb = new GraphBuilder(new QueryBuilder("127.0.0.1", 5000));
 		Edge edge;
 		try {
 			edge = gb.makeEdge(c1, c2);
+			System.out.println(c1.getLocationLong() + " :: " + c1.getLocationShort());
+			System.out.println(c1.getCoordinates());
+			System.out.println(c2.getLocationLong() + " :: " + c2.getLocationShort());
+			System.out.println(c2.getCoordinates());
 			System.out.println(edge.getDistance());
 			System.out.println(edge.getTravelTime());
 		} catch (Exception e) {
