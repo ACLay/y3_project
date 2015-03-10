@@ -31,21 +31,27 @@ import XML.XMLedges;
 public class GraphBuilder {
 
 	QueryBuilder qb;
+	Amount<Length> maxDistance;
 
-	public GraphBuilder(QueryBuilder queryBuilder){
+	public GraphBuilder(QueryBuilder queryBuilder, Amount<Length> maxDistance){
 		qb = queryBuilder;
+		this.maxDistance = maxDistance;
 	}
 	
 	public static void main(String[] args){
 		Collection<Charger> chargers = ChargerLoader.loadFromFile("./xml/edited_registry.xml");
-		GraphBuilder gb = new GraphBuilder(new QueryBuilder("127.0.0.1",5000));
+		GraphBuilder gb = new GraphBuilder(new QueryBuilder("127.0.0.1",5000), Amount.valueOf(426, SI.KILOMETER));
 		long startTime = System.currentTimeMillis();
-		gb.buildGraph(chargers, Amount.valueOf(426, SI.KILOMETER));//EPA range of the (85kWh) tesla model s
+		gb.buildGraph(chargers);//EPA range of the (85kWh) tesla model s
 		long endTime = System.currentTimeMillis();
 		System.out.println("In " + (endTime-startTime) + "ms");
 	}
 
-	public void buildGraph(Collection<Charger> chargers, Amount<Length> maxDistance){
+	public Amount<Length> getMaxDistance(){
+		return maxDistance;
+	}
+	
+	public void buildGraph(Collection<Charger> chargers){
 
 		Iterator<Charger> iter1 = chargers.iterator();
 		

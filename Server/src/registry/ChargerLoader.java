@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.measure.unit.SI;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+
+import org.jscience.physics.amount.Amount;
 
 import router.Edge;
 import Model.Charger;
@@ -67,7 +70,7 @@ public class ChargerLoader {
 		Charger c1 = it.next();
 		Charger c2 = it.next();
 		
-		GraphBuilder gb = new GraphBuilder(new QueryBuilder("osrm.mapzen.com/car", null));
+		GraphBuilder gb = new GraphBuilder(new QueryBuilder("osrm.mapzen.com/car", null), Amount.valueOf(426, SI.KILOMETER));
 		Edge edge;
 		try {
 			edge = gb.makeEdge(c1, c2);
