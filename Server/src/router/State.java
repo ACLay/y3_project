@@ -6,8 +6,10 @@ import java.util.Collections;
 import javax.measure.quantity.Duration;
 import javax.measure.quantity.Energy;
 import javax.measure.quantity.Length;
+import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
 
+import org.jscience.geography.coordinates.LatLong;
 import org.jscience.physics.amount.Amount;
 
 import Model.Car;
@@ -113,6 +115,13 @@ public class State {
 	
 	public void printStats(){
 		System.out.println("Stats: " + stringAmount(distance) + ", " + stringAmount(time) + ", " + stringAmount(car.chargeNeededToTravel(distance)));
+	}
+	
+	public String getCoordinateString(){
+		LatLong loc = location.getCoordinates();
+		double latitude = loc.latitudeValue(NonSI.DEGREE_ANGLE);
+		double longitude = loc.longitudeValue(NonSI.DEGREE_ANGLE);
+		return latitude + "," + longitude;
 	}
 
 	private String stringAmount(Amount<?> quantity){
