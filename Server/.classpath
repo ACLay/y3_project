@@ -3,5 +3,31 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="jar/jscience.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-server-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/servlet-api-3.1.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-util-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-http-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-alpn-client-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-alpn-server-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-annotations-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-cdi-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-client-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-continuation-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-deploy-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-io-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-jaas-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-jaspi-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-jmx-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-jndi-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-plus-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-proxy-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-quickstart-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-rewrite-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-schemas-3.1.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-security-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-servlet-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-servlets-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-webapp-9.2.10.v20150310.jar"/>
+	<classpathentry kind="lib" path="/media/data/Documents/University Degree/3rd Year Project/jetty-distribution-9.2.10.v20150310/lib/jetty-xml-9.2.10.v20150310.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
