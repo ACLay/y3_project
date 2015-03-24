@@ -73,7 +73,7 @@ public class RouteTest2 {
 		if(endState == null){
 			System.out.println("Cannot route");
 		} else {
-			endState.printRoute();
+			System.out.println(endState.getRouteString("\n"));
 		}
 		
 	}
