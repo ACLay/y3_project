@@ -76,15 +76,16 @@ public class State {
 		return car;
 	}
 
-	public void printRoute(){
+	public String getRouteString(String eol){
 		State current = this;
 		State predecessor;
 		ArrayList<String> moves = new ArrayList<String>();
+		StringBuilder sb = new StringBuilder();
 		//for each state in the route
 		do{
 			//get its predecessor
 			predecessor = current.getPrevious();
-			String locationDesc = current.getLocation().getLocationLong();
+			String locationDesc = current.getLocation().getLocationLong() + " | " + current.getLocation().getLocationShort() + " (" + current.getCoordinateString() + ")";
 			
 			//print the transition
 			if(predecessor == null){
@@ -100,8 +101,6 @@ public class State {
 				Amount<Length> travelDistance = current.getDistance().minus(predecessor.getDistance());
 				moves.add("Travel to " + locationDesc + "(" + stringAmount(travelDistance) + ", " + stringAmount(travelTime) + ")");
 			}
-			
-			
 
 			current = predecessor;
 		}while(predecessor != null);
@@ -109,8 +108,11 @@ public class State {
 		Collections.reverse(moves);
 		
 		for(String s : moves){
-			System.out.println(s);
+			sb.append(s);
+			sb.append(eol);
 		}
+		
+		return sb.toString();
 	}
 	
 	public void printStats(){
