@@ -118,7 +118,32 @@ public class RouteServerHandler extends AbstractHandler{
 						}
 					}
 				}
-				if(endPoint == null && startPoint == null){
+				
+				if(startPoint == null){
+					System.out.println("Trying to build custom start " + startPointID);
+					LatLong coordinates = GeoCode.getCoordinates(startPointID);
+					if(coordinates != null){
+						System.out.println("custom start success");
+						startPoint = new Charger("customStart", null, null, coordinates, startPointID, null, new HashSet<Connector>());
+					} else {
+						System.out.println("custom start failed");
+					}
+				}
+				if(endPoint == null){
+					System.out.println("Trying to build custom end " + endPointID);
+					LatLong coordinates = GeoCode.getCoordinates(endPointID);
+					if(coordinates != null){
+						System.out.println("custom end success");
+						endPoint = new Charger("customEnd", null, null, coordinates, endPointID, null, new HashSet<Connector>());
+					} else {
+						System.out.println("custom end failed");
+					}
+				}
+				if(startPoint != null && endPoint != null){
+					GraphBuilder gb = new GraphBuilder(new QueryBuilder("localhost", 5000), Amount.valueOf(426, SI.KILOMETER)/*Tesla Model S 85kWh*/);
+					g = new CustomPointFolderGraph("./xml/edges/", "./xml/edges/edited_registry.xml", startPoint, endPoint, gb);
+				}
+				if(endPoint == null || startPoint == null){
 					//cannot find chargers
 					response.getWriter().println("<h1>Unable to locate specified chargers</h1>");
 					return;
@@ -142,8 +167,8 @@ public class RouteServerHandler extends AbstractHandler{
 				LatLong startLoc = LatLong.valueOf(startLat, startLon, NonSI.DEGREE_ANGLE);
 				LatLong endLoc = LatLong.valueOf(endLat, endLon, NonSI.DEGREE_ANGLE);
 
-				startPoint = new Charger(null, null, null, startLoc, null, null, new HashSet<Connector>());
-				endPoint = new Charger(null, null, null, endLoc, null, null, new HashSet<Connector>());
+				startPoint = new Charger("customStart", null, null, startLoc, null, null, new HashSet<Connector>());
+				endPoint = new Charger("customEnd", null, null, endLoc, null, null, new HashSet<Connector>());
 				
 				GraphBuilder gb = new GraphBuilder(new QueryBuilder("localhost", 5000), Amount.valueOf(426, SI.KILOMETER)/*Tesla Model S 85kWh*/);
 				g = new CustomPointFolderGraph("./xml/edges/", "./xml/edges/edited_registry.xml", startPoint, endPoint, gb);
