@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import router.Edge;
+import router.Geography;
 import Model.Charger;
 import OSRM.GraphBuilder;
 
@@ -51,19 +52,26 @@ public class CustomPointFolderGraph extends FolderGraph {
 			if(!super.containsNode(startPoint)){
 				Edge edge = makeEdge(startPoint, endPoint);
 				if(edge != null){
-					edgesToEnd.put(startPoint.getID(), edge);
+					//edgesToEnd.put(startPoint.getID(), edge);
+					edgesFromStart.add(edge);
+					System.out.println("edge made " + edge.getDistance());
 				}
 			}
 		}
 	}
 	
 	private Edge makeEdge(Charger startPoint, Charger endPoint){
+		
+		if(Geography.haversineDistance(startPoint, endPoint).isGreaterThan(gb.getMaxDistance())){
+			return null;
+		}
+		
 		Edge edge;
 		try {
 			edge = gb.makeEdge(startPoint, endPoint);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("unmade route");
 			return null;
 		}
 		if(edge == null){
