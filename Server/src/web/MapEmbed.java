@@ -6,7 +6,7 @@ import router.State;
 
 public class MapEmbed {
 
-	private static String API_KEY = "AIzaSyBgGuqODb7D-IX0E4BTvWqVIWhrRyAFoSE";
+	protected static String API_KEY = "AIzaSyBgGuqODb7D-IX0E4BTvWqVIWhrRyAFoSE";
 	//map embed api guide: https://developers.google.com/maps/documentation/embed/guide
 	
 	public static String getEmbedCode(State route){
