@@ -1,12 +1,9 @@
 package OSRM;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -24,6 +21,7 @@ import org.json.JSONObject;
 import registry.ChargerLoader;
 import router.Edge;
 import router.Geography;
+import web.Json;
 import Model.Charger;
 import XML.XMLedge;
 import XML.XMLedges;
@@ -129,7 +127,7 @@ public class GraphBuilder {
 		}
 		try{
 			
-			JSONObject json = readURL(url);
+			JSONObject json = Json.readURL(url);
 			int status = json.getInt("status");
 			if(status == 0){
 				JSONObject summary = json.getJSONObject("route_summary");
@@ -144,25 +142,6 @@ public class GraphBuilder {
 		} catch (JSONException je){
 			throw je;
 		}
-	}
-	
-	private static JSONObject readURL(URL url) throws IOException{
-		URLConnection yc = url.openConnection();
-		BufferedReader br = new BufferedReader(
-				new InputStreamReader(
-						yc.getInputStream()));
-		
-		StringBuilder urlData = new StringBuilder();
-		
-		String inputLine;
-		
-		while ((inputLine = br.readLine()) != null){
-			urlData.append(inputLine).append("\n");
-		}
-		br.close();
-
-		String jsonText = urlData.toString();
-		return new JSONObject(jsonText);
 	}
 
 }
