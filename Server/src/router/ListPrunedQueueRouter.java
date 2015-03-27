@@ -32,7 +32,7 @@ public class ListPrunedQueueRouter extends QueueRouter {
 		
 		for(State oldState : candidates){
 			//if there exists a state that the new one is no better than in either stat, the new one shouldn't be added
-			if(!s.isFasterThan(oldState) && !s.isChargierThan(oldState)){
+			if(!s.isFasterThan(oldState) && !s.isChargierThan(oldState)){//TODO this in the superior function
 				addNewState = false;
 			//if there exists an old state with no better stats than the new one, the old one should be dropped
 			} else if(!oldState.isFasterThan(s) && !oldState.isChargierThan(s)){
@@ -41,17 +41,27 @@ public class ListPrunedQueueRouter extends QueueRouter {
 		}
 		
 		if(addNewState){
-			pq.add(s);
-			candidates.add(s);
-			stored++;
+			storeState(s);
 		}
 		
 		for(State old : inferiors){
-			pq.remove(old);
-			candidates.remove(old);
-			dropped++;
+			removeState(old);
 		}
 		inferiors.clear();
+	}
+	
+	protected void storeState(State s){
+		pq.add(s);
+		ArrayList<State> candidates = candidateStates.get(s.getLocation());
+		candidates.add(s);
+		stored++;
+	}
+	
+	protected void removeState(State s){
+		pq.remove(s);
+		ArrayList<State> candidates = candidateStates.get(s.getLocation());
+		candidates.remove(s);
+		dropped++;
 	}
 	
 	public long getDropped(){
