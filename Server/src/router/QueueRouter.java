@@ -117,7 +117,7 @@ public class QueueRouter extends Router{
 		stored++;
 	}
 
-	private State getState(){
+	protected State getState(){
 		explored++;
 		return pq.poll();
 	}
