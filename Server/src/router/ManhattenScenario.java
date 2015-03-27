@@ -42,10 +42,12 @@ public class ManhattenScenario extends Scenario {
 		AStarStateTimeComparator heurComp = new AStarStateTimeComparator(rm.getFinish(), Amount.valueOf(30, NonSI.MILES_PER_HOUR), fastest);
 		DistanceStoringAStarComparator dsComp = new DistanceStoringAStarComparator(rm.getFinish(), Amount.valueOf(30, NonSI.MILES_PER_HOUR), fastest);
 		
-		Router[] routers = new Router[]{/*new DualPrunedQueueRouter(tComp), new QueuePrunedQueueRouter(tComp),*/ new ListPrunedQueueRouter(tComp), new ListPrunedQueueRouter(heurComp), new ListPrunedQueueRouter(dsComp)};
+		Router[] routers = new Router[]{/*new DualPrunedQueueRouter(tComp), new QueuePrunedQueueRouter(tComp), new ListPrunedQueueRouter(tComp),*/ new ListPrunedQueueRouter(heurComp),/* new ListPrunedQueueRouter(dsComp),*/ new UberPrunedRouter(heurComp) };
 
 		for(Router router : routers){
-
+			
+			System.gc();
+			
 			Long startTime = System.currentTimeMillis();
 			State state = router.route(rm);
 			Long endTime = System.currentTimeMillis();
