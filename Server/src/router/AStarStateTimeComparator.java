@@ -50,7 +50,7 @@ public class AStarStateTimeComparator extends StateTimeComparator{
 		Car vehicle = s.getCar();
 		Amount<Energy> currentCharge = s.getEnergy();
 		Amount<Energy> energyNeeded = vehicle.chargeNeededToTravel(distance);
-		if(currentCharge.isLessThan(energyNeeded)){
+		if(!energyNeeded.isGreaterThan(currentCharge)){
 			return Amount.valueOf(0,SI.SECOND);
 		} else {
 			Amount<Energy> excess = energyNeeded.minus(currentCharge);
