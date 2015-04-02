@@ -1,16 +1,17 @@
-package router;
+package router.router;
 
 import java.util.HashMap;
 
+import router.State;
+import router.comparator.StateTimeComparator;
 import Model.Charger;
 
-public class DualPrunedQueueRouter extends QueueRouter {
+public class ChargePrunedQueueRouter extends QueueRouter {
 	
-	public DualPrunedQueueRouter(StateTimeComparator comparator) {
+	public ChargePrunedQueueRouter(StateTimeComparator comparator) {
 		super(comparator);
 	}
 
-	HashMap<Charger, State> fastestStates = new HashMap<Charger, State>();
 	HashMap<Charger, State> chargestStates = new HashMap<Charger, State>();
 	
 	protected void addState(State s){
@@ -32,13 +33,11 @@ public class DualPrunedQueueRouter extends QueueRouter {
 		
 		boolean addable = false;
 		
-		if(fastestStates.containsKey(location)){
-			State fastest = fastestStates.get(location);
+		if(chargestStates.containsKey(location)){
 			State chargest = chargestStates.get(location);
 			//A state for a location should be checked:
 			//if it's the fastest
-			if(s.getTime().isLessThan(fastest.getTime())){
-				fastestStates.put(location, s);
+			if(s.getTime().isLessThan(chargest.getTime())){
 				addable = true;
 			}
 			//if its got the most charge
@@ -46,13 +45,8 @@ public class DualPrunedQueueRouter extends QueueRouter {
 				chargestStates.put(location, s);
 				addable = true;
 			}
-			//if its got more charge than the fastest, and is faster than the best charged
-			if(s.getTime().isLessThan(chargest.getTime()) && s.getEnergy().isGreaterThan(fastest.getEnergy())){
-				addable = true;
-			}
 			
 		} else {
-			fastestStates.put(location, s);
 			chargestStates.put(location, s);
 			addable = true;
 		}

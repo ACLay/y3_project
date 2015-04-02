@@ -10,12 +10,12 @@ import javax.measure.unit.SI;
 import org.jscience.physics.amount.Amount;
 
 import registry.ChargerLoader;
-import router.DistanceStoringAStarComparator;
-import router.ListPrunedQueueRouter;
-import router.Router;
 import router.Scenario;
 import router.State;
+import router.comparator.DistanceStoringAStarComparator;
 import router.graph.FolderGraph;
+import router.router.ListPrunedQueueRouter;
+import router.router.Router;
 import Model.Car;
 import Model.Charger;
 import Model.connectors.Connector;

@@ -1,4 +1,4 @@
-package router;
+package router.router;
 
 import java.util.PriorityQueue;
 
@@ -10,6 +10,10 @@ import javax.measure.unit.SI;
 
 import org.jscience.physics.amount.Amount;
 
+import router.Edge;
+import router.Scenario;
+import router.State;
+import router.comparator.StateTimeComparator;
 import router.graph.Graph;
 import Model.Car;
 import Model.Charger;

@@ -1,10 +1,12 @@
-package router;
+package router.router;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import router.State;
+import router.comparator.StateTimeComparator;
 import Model.Charger;
 
 public class ListPrunedQueueRouter extends QueueRouter {

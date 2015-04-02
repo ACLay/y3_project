@@ -1,4 +1,7 @@
-package router;
+package router.router;
+
+import router.Scenario;
+import router.State;
 
 
 public abstract class Router {

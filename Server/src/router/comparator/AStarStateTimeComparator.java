@@ -1,4 +1,4 @@
-package router;
+package router.comparator;
 
 import javax.measure.quantity.Duration;
 import javax.measure.quantity.Energy;
@@ -9,6 +9,8 @@ import javax.measure.unit.SI;
 
 import org.jscience.physics.amount.Amount;
 
+import router.Geography;
+import router.State;
 import Model.Car;
 import Model.Charger;
 

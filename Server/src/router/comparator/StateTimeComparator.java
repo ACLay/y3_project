@@ -1,6 +1,8 @@
-package router;
+package router.comparator;
 
 import java.util.Comparator;
+
+import router.State;
 
 public class StateTimeComparator implements Comparator<State>{
 	@Override

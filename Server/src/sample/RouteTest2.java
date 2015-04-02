@@ -8,13 +8,13 @@ import javax.measure.unit.SI;
 import org.jscience.physics.amount.Amount;
 
 import router.Edge;
-import router.QueueRouter;
-import router.Router;
 import router.Scenario;
 import router.State;
-import router.StateTimeComparator;
+import router.comparator.StateTimeComparator;
 import router.graph.Graph;
 import router.graph.RamGraph;
+import router.router.QueueRouter;
+import router.router.Router;
 import Model.Car;
 import Model.Charger;
 import Model.connectors.Connector;

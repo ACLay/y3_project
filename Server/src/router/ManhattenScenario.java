@@ -9,7 +9,13 @@ import javax.measure.unit.SI;
 import org.jscience.geography.coordinates.LatLong;
 import org.jscience.physics.amount.Amount;
 
+import router.comparator.AStarStateTimeComparator;
+import router.comparator.DistanceStoringAStarComparator;
+import router.comparator.StateTimeComparator;
 import router.graph.RamGraph;
+import router.router.ListPrunedQueueRouter;
+import router.router.Router;
+import router.router.UberPrunedRouter;
 import Model.Car;
 import Model.Charger;
 import Model.connectors.Connector;
@@ -42,7 +48,13 @@ public class ManhattenScenario extends Scenario {
 		AStarStateTimeComparator heurComp = new AStarStateTimeComparator(rm.getFinish(), Amount.valueOf(30, NonSI.MILES_PER_HOUR), fastest);
 		DistanceStoringAStarComparator dsComp = new DistanceStoringAStarComparator(rm.getFinish(), Amount.valueOf(30, NonSI.MILES_PER_HOUR), fastest);
 		
-		Router[] routers = new Router[]{/*new DualPrunedQueueRouter(tComp), new QueuePrunedQueueRouter(tComp), new ListPrunedQueueRouter(tComp),*/ new ListPrunedQueueRouter(heurComp),/* new ListPrunedQueueRouter(dsComp),*/ new UberPrunedRouter(heurComp) };
+		Router[] routers = new Router[]{
+				/*new DualPrunedQueueRouter(tComp),
+				new QueuePrunedQueueRouter(tComp),
+				new ListPrunedQueueRouter(tComp),*/
+				new ListPrunedQueueRouter(heurComp)/*,
+				new ListPrunedQueueRouter(dsComp),
+				new UberPrunedRouter(heurComp)*/ };
 
 		for(Router router : routers){
 			

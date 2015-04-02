@@ -1,4 +1,4 @@
-package router;
+package router.comparator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +10,8 @@ import javax.measure.quantity.Velocity;
 
 import org.jscience.physics.amount.Amount;
 
+import router.Geography;
+import router.State;
 import Model.Charger;
 
 public class DistanceStoringAStarComparator extends AStarStateTimeComparator{
