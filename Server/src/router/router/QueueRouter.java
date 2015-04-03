@@ -60,6 +60,9 @@ public class QueueRouter extends Router{
 			//System.out.println("Exploring from: " + n.getLocation().getLocationLong() + ". States in queue: " + q.size());
 
 			for(Edge e : graph.getEdgesFrom(n.getLocation())){
+				if(!(e.getEndPoint().equals(endpoint) || e.getEndPoint().canCharge(vehicle))){
+					continue;
+				}
 				Amount<Energy> chargeNeeded = vehicle.chargeNeededToTravel(e.getDistance());
 				//ensure the vehicle can travel along this edge
 				if(chargeNeeded.isLessThan(vehicle.getCapacity())){
