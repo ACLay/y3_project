@@ -1,8 +1,10 @@
 package router.router;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 import javax.measure.quantity.Duration;
 import javax.measure.quantity.Energy;
@@ -24,11 +26,13 @@ public class TimeOnlyRouter extends Router{
 	Graph graph;
 	PriorityQueue<State> pq;
 	Map<Charger,State> bestStates;
+	Set<Charger> expanded;
 	StateTimeComparator comparator;
 
 	public TimeOnlyRouter(StateTimeComparator comparator){
 		this.comparator = comparator;
 		bestStates = new HashMap<Charger, State>();
+		expanded = new HashSet<Charger>();
 	}
 
 	@Override
@@ -63,18 +67,24 @@ public class TimeOnlyRouter extends Router{
 			//System.out.println("Exploring from: " + n.getLocation().getLocationLong() + ". States in queue: " + q.size());
 
 			for(Edge e : graph.getEdgesFrom(n.getLocation())){
-				Amount<Energy> chargeNeeded = vehicle.chargeNeededToTravel(e.getDistance());
-				//ensure the vehicle can travel along this edge
-				Amount<Duration> time;
-				Amount<Energy> charge;
-				Amount<Length> distance;
+				if(!expanded.contains(e.getEndPoint())){//
+					Amount<Energy> chargeNeeded = vehicle.chargeNeededToTravel(e.getDistance());
+					//ensure the vehicle can travel along this edge
+					Amount<Duration> time;
+					Amount<Energy> charge;
+					Amount<Length> distance;
 
-				distance = n.getDistance().plus(e.getDistance());
-				time = n.getTime().plus(e.getTravelTime());
-				charge = n.getEnergy().minus(chargeNeeded);
-				State low = new State(e.getEndPoint(),time,charge,n,distance,vehicle);
-				addState(low);
+					distance = n.getDistance().plus(e.getDistance());
+					time = n.getTime().plus(e.getTravelTime());
+					charge = n.getEnergy().minus(chargeNeeded);
 
+					State low = new State(e.getEndPoint(),time,charge,n,distance,vehicle);
+					addState(low);
+					
+					if(pq.size() % 20 == 0){
+						System.out.println(pq.size());
+					}
+				}
 			}
 
 		}
@@ -101,6 +111,11 @@ public class TimeOnlyRouter extends Router{
 	protected State getState(){
 		explored++;
 		State s = pq.poll();
+		expanded.add(s.getLocation());
+		if(s.getLocation()==null){
+			System.out.println("null location" + explored);
+			System.out.println(s.getPrevious().getLocation().getID());
+		}
 		return s;
 	}
 
