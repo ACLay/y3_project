@@ -99,7 +99,10 @@ public class FolderGraph implements Graph{
 			//The p: at the start of the ChargeDevices tags need removing for this to work
 			File file = new File(dir + startID + ".xml");
 
-
+			if(!file.exists()){
+				System.err.println(startID + " does not exist");
+				return new ArrayList<Edge>();
+			}
 			JAXBContext jaxbContext = JAXBContext.newInstance(XMLedges.class);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			
