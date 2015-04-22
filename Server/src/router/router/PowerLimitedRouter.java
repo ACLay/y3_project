@@ -55,6 +55,7 @@ public class PowerLimitedRouter extends ListPrunedQueueRouter{
 		if(!linked){
 			return null;
 		}
+		System.out.println("start and end are linked");
 		
 		pq = new PriorityQueue<State>(3, comparator);
 		if(!(graph.containsNode(startpoint) && graph.containsNode(endpoint))){
