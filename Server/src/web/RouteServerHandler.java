@@ -44,7 +44,7 @@ import OSRM.GraphBuilder;
 import OSRM.QueryBuilder;
 
 public class RouteServerHandler extends AbstractHandler{
-	
+
 	public static final String START_ID = "startID";
 	public static final String END_ID = "endID";
 	public static final String START_LAT = "startLat";
@@ -53,12 +53,12 @@ public class RouteServerHandler extends AbstractHandler{
 	public static final String END_LON = "endLon";
 	public static final String CAR_RANGE = "carRange";
 	public static final String CAR_CAPACITY = "carCapacity";
-	
+
 	public static void main(String[] args) throws Exception{
-		
+
 		Server server = new Server(8080);
 		server.setHandler(new RouteServerHandler());
-		
+
 		server.start();
 		server.join();
 	}
@@ -66,14 +66,14 @@ public class RouteServerHandler extends AbstractHandler{
 	@Override
 	public void handle(String target, Request baseRequest, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
-		
+
 		response.setContentType("text/html;charset=utf-8");
 		response.setStatus(HttpServletResponse.SC_OK);
 		baseRequest.setHandled(true);
-		
+
 		String path = request.getPathInfo();
 		System.out.println(path);
-		
+
 		if(path.equals("/") || path.equals("/index") || path.equals("/index.html")){
 			//if main page, make main page
 			Map<String,String[]> parameters = request.getParameterMap();
@@ -93,7 +93,7 @@ public class RouteServerHandler extends AbstractHandler{
 			for(String s : lines){
 				response.getWriter().println(s);
 			}
-			
+
 		} else if (path.equals("/search") || path.equals("/search.html")){
 			//if search page, run query
 			Map<String,String[]> parameters = request.getParameterMap();
