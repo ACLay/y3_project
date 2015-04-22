@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +32,10 @@ import router.comparator.StateTimeComparator;
 import router.graph.CustomPointFolderGraph;
 import router.graph.FolderGraph;
 import router.graph.Graph;
+import router.router.FastChargeRouter;
 import router.router.PowerLimitedRouter;
 import router.router.Router;
+import router.router.TimeOnlyRouter;
 import Model.Car;
 import Model.Charger;
 import Model.connectors.Connector;
@@ -95,12 +98,13 @@ public class RouteServerHandler extends AbstractHandler{
 			//if search page, run query
 			Map<String,String[]> parameters = request.getParameterMap();
 			//get the startpoint, endpoint, car from url parameters
-				//startpoint and endpoint need charger ID or (lat,long) data
+			//startpoint and endpoint need charger ID or (lat,long) data
 			Charger startPoint = null, endPoint = null;
 			Graph g;
-			
+
 			if(parameters.containsKey(START_ID) && parameters.containsKey(END_ID)){
 				g = new FolderGraph("./xml/edges/", "./xml/edges/edited_registry.xml");
+				System.out.println("original graph");
 				Collection<Charger> nodes = g.getNodes();
 				String startPointID = parameters.get(START_ID)[0];
 				String endPointID = parameters.get(END_ID)[0];
@@ -118,42 +122,44 @@ public class RouteServerHandler extends AbstractHandler{
 						}
 					}
 				}
-				
-				if(startPoint == null){
-					System.out.println("Trying to build custom start " + startPointID);
-					LatLong coordinates = GeoCode.getCoordinates(startPointID);
-					if(coordinates != null){
-						System.out.println("custom start success");
-						startPoint = new Charger("customStart", null, null, coordinates, startPointID, null, new HashSet<Connector>());
-					} else {
-						System.out.println("custom start failed");
-					}
-				}
-				if(endPoint == null){
-					System.out.println("Trying to build custom end " + endPointID);
-					LatLong coordinates = GeoCode.getCoordinates(endPointID);
-					if(coordinates != null){
-						System.out.println("custom end success");
-						endPoint = new Charger("customEnd", null, null, coordinates, endPointID, null, new HashSet<Connector>());
-					} else {
-						System.out.println("custom end failed");
-					}
-				}
-				if(startPoint != null && endPoint != null){
-					GraphBuilder gb = new GraphBuilder(new QueryBuilder("localhost", 5000), Amount.valueOf(426, SI.KILOMETER)/*Tesla Model S 85kWh*/);
-					g = new CustomPointFolderGraph("./xml/edges/", "./xml/edges/edited_registry.xml", startPoint, endPoint, gb);
-				}
 				if(endPoint == null || startPoint == null){
-					//cannot find chargers
-					response.getWriter().println("<h1>Unable to locate specified chargers</h1>");
-					return;
+					if(startPoint == null){
+						System.out.println("Trying to build custom start " + startPointID);
+						LatLong coordinates = GeoCode.getCoordinates(startPointID);
+						if(coordinates != null){
+							System.out.println("custom start success");
+							startPoint = new Charger("customStart", null, null, coordinates, startPointID, null, new HashSet<Connector>());
+						} else {
+							System.out.println("custom start failed");
+						}
+					}
+					if(endPoint == null){
+						System.out.println("Trying to build custom end " + endPointID);
+						LatLong coordinates = GeoCode.getCoordinates(endPointID);
+						if(coordinates != null){
+							System.out.println("custom end success");
+							endPoint = new Charger("customEnd", null, null, coordinates, endPointID, null, new HashSet<Connector>());
+						} else {
+							System.out.println("custom end failed");
+						}
+					}
+					if(startPoint != null && endPoint != null){
+						GraphBuilder gb = new GraphBuilder(new QueryBuilder("localhost", 5000), Amount.valueOf(426, SI.KILOMETER)/*Tesla Model S 85kWh*/);
+						g = new CustomPointFolderGraph("./xml/powerCut2/", "./xml/powerCut2/nodes.xml", startPoint, endPoint, gb);
+						System.out.println("next graph");
+					}
+					if(endPoint == null || startPoint == null){
+						//cannot find chargers
+						response.getWriter().println("<h1>Unable to locate specified chargers</h1>");
+						return;
+					}
 				}
 			} else if (parameters.containsKey(START_LAT) && parameters.containsKey(START_LON) && parameters.containsKey(END_LAT) && parameters.containsKey(END_LON)){
 				double startLat;
 				double startLon;
 				double endLat;
 				double endLon;
-				
+
 				try{
 					startLat = Double.parseDouble(parameters.get(START_LAT)[0]);
 					startLon = Double.parseDouble(parameters.get(START_LON)[0]);
@@ -169,18 +175,19 @@ public class RouteServerHandler extends AbstractHandler{
 
 				startPoint = new Charger("customStart", null, null, startLoc, null, null, new HashSet<Connector>());
 				endPoint = new Charger("customEnd", null, null, endLoc, null, null, new HashSet<Connector>());
-				
+
 				GraphBuilder gb = new GraphBuilder(new QueryBuilder("localhost", 5000), Amount.valueOf(426, SI.KILOMETER)/*Tesla Model S 85kWh*/);
-				g = new CustomPointFolderGraph("./xml/edges/", "./xml/edges/edited_registry.xml", startPoint, endPoint, gb);
+				g = new CustomPointFolderGraph("./xml/powerCut2/", "./xml/powerCut2/nodes.xml", startPoint, endPoint, gb);
+				System.out.println("third graph");
 			} else {
 				//cannot make start and end points
 				response.getWriter().println("<h1>No start and end points specified</h1>");
 				return;
 			}
-				//car needs range, connectors, capacity
+			//car needs range, connectors, capacity
 			Amount<Length> range;
 			Amount<Energy> capacity;
-			
+
 			if(parameters.containsKey(CAR_RANGE) && parameters.containsKey(CAR_CAPACITY)){
 				double rangeVal;
 				double capacityVal;
@@ -198,9 +205,9 @@ public class RouteServerHandler extends AbstractHandler{
 				response.getWriter().println("<h1>Car data not specified</h1>");
 				return;
 			}
-			
+
 			Car car = new Car("electric vehicle", range, capacity);
-			
+
 			//add connectors using their short descriptions as parameter keys
 			//This class is immune to changes in available connectors!
 			for(Type t : Type.values()){
@@ -214,8 +221,8 @@ public class RouteServerHandler extends AbstractHandler{
 					}
 				}
 			}
-			
-			
+
+
 			//find the fastest charger in the network
 			Amount<Power> fastestCharge = Amount.valueOf(0, SI.WATT);
 			for(Charger c : g.getNodes()){
@@ -225,9 +232,11 @@ public class RouteServerHandler extends AbstractHandler{
 					}
 				}
 			}
-			
+
 			StateTimeComparator comp = new DistanceStoringAStarComparator(endPoint, Amount.valueOf(120, NonSI.KILOMETERS_PER_HOUR)/*ROI motorways*/, fastestCharge);
-			Router router = new PowerLimitedRouter(comp, Amount.valueOf(20, SI.KILO(SI.WATT)));
+			Router// router = new PowerLimitedRouter(comp, Amount.valueOf(20, SI.KILO(SI.WATT)));
+			router = new FastChargeRouter(new StateTimeComparator()/*comp*/);
+			//router = new TimeOnlyRouter(new StateTimeComparator());
 			//build a scenario
 			Scenario s = new Scenario(g, startPoint, endPoint, car);
 			//route that scenario
@@ -242,7 +251,8 @@ public class RouteServerHandler extends AbstractHandler{
 				response.getWriter().println("<h3>" + result.getDistance() + "</h3>");
 				response.getWriter().println("<h3>" + result.getTime() + "</h3>");
 				response.getWriter().println("<h3>" + result.getEnergy() + "</h3>");
-				response.getWriter().println("<body>" + result.getRouteString("<br>") + new Long((endTime-startTime)/1000).toString() + "seconds<br></body>");
+				response.getWriter().println("<body>" + result.getRouteString("<br>")
+						+ "routing took " + new Double(endTime-startTime).toString() + "ms<br></body>");
 				response.getWriter().println(MapEmbed.getEmbedCode(result));
 				router.printStats();
 			}
