@@ -1,0 +1,8 @@
+dijkstras:
+	70141 created
+	  631 stored
+	  316 explored
+A-star:
+	69052 created
+	  613 stored
+	  299 explored

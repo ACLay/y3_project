@@ -1,0 +1,9 @@
+noScience
+11.3s
+10.3s
+11.8s
+
+jScience
+13.0s
+12.7s
+13.4s
