@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -32,12 +31,13 @@ import router.comparator.StateTimeComparator;
 import router.graph.CustomPointFolderGraph;
 import router.graph.FolderGraph;
 import router.graph.Graph;
+import router.router.ChargeOptimizer;
 import router.router.FastChargeRouter;
-import router.router.PowerLimitedRouter;
+//import router.router.ListPrunedQueueRouter;
 import router.router.Router;
-import router.router.TimeOnlyRouter;
+//import router.router.TimeOnlyRouter;
 import Model.Car;
-import Model.Charger;
+import Model.Node;
 import Model.connectors.Connector;
 import Model.connectors.Type;
 import OSRM.GraphBuilder;
@@ -54,6 +54,9 @@ public class RouteServerHandler extends AbstractHandler{
 	public static final String CAR_RANGE = "carRange";
 	public static final String CAR_CAPACITY = "carCapacity";
 
+	//static final String edgeDir = "./xml/edges/", nodeFile = "./xml/edges/edited_registry.xml";
+	static final String edgeDir = "./xml/powerCut2/", nodeFile = "./xml/powerCut2/nodes.xml";
+	
 	public static void main(String[] args) throws Exception{
 
 		Server server = new Server(8080);
@@ -99,16 +102,16 @@ public class RouteServerHandler extends AbstractHandler{
 			Map<String,String[]> parameters = request.getParameterMap();
 			//get the startpoint, endpoint, car from url parameters
 			//startpoint and endpoint need charger ID or (lat,long) data
-			Charger startPoint = null, endPoint = null;
+			Node startPoint = null, endPoint = null;
 			Graph g;
 
 			if(parameters.containsKey(START_ID) && parameters.containsKey(END_ID)){
-				g = new FolderGraph("./xml/edges/", "./xml/edges/edited_registry.xml");
+				g = new FolderGraph(edgeDir, nodeFile);
 				System.out.println("original graph");
-				Collection<Charger> nodes = g.getNodes();
+				Collection<Node> nodes = g.getNodes();
 				String startPointID = parameters.get(START_ID)[0];
 				String endPointID = parameters.get(END_ID)[0];
-				for(Charger c : nodes){
+				for(Node c : nodes){
 					if(c.getID().equals(startPointID)){
 						startPoint = c;
 						if(endPoint != null){
@@ -127,8 +130,8 @@ public class RouteServerHandler extends AbstractHandler{
 						System.out.println("Trying to build custom start " + startPointID);
 						LatLong coordinates = GeoCode.getCoordinates(startPointID);
 						if(coordinates != null){
-							System.out.println("custom start success");
-							startPoint = new Charger("customStart", null, null, coordinates, startPointID, null, new HashSet<Connector>());
+							System.out.println("custom start success" + coordinates);
+							startPoint = new Node("customStart", null, null, coordinates, startPointID, null, new HashSet<Connector>());
 						} else {
 							System.out.println("custom start failed");
 						}
@@ -137,15 +140,15 @@ public class RouteServerHandler extends AbstractHandler{
 						System.out.println("Trying to build custom end " + endPointID);
 						LatLong coordinates = GeoCode.getCoordinates(endPointID);
 						if(coordinates != null){
-							System.out.println("custom end success");
-							endPoint = new Charger("customEnd", null, null, coordinates, endPointID, null, new HashSet<Connector>());
+							System.out.println("custom end success" + coordinates);
+							endPoint = new Node("customEnd", null, null, coordinates, endPointID, null, new HashSet<Connector>());
 						} else {
 							System.out.println("custom end failed");
 						}
 					}
 					if(startPoint != null && endPoint != null){
 						GraphBuilder gb = new GraphBuilder(new QueryBuilder("localhost", 5000), Amount.valueOf(426, SI.KILOMETER)/*Tesla Model S 85kWh*/);
-						g = new CustomPointFolderGraph("./xml/powerCut2/", "./xml/powerCut2/nodes.xml", startPoint, endPoint, gb);
+						g = new CustomPointFolderGraph(edgeDir, nodeFile, startPoint, endPoint, gb);
 						System.out.println("next graph");
 					}
 					if(endPoint == null || startPoint == null){
@@ -173,11 +176,11 @@ public class RouteServerHandler extends AbstractHandler{
 				LatLong startLoc = LatLong.valueOf(startLat, startLon, NonSI.DEGREE_ANGLE);
 				LatLong endLoc = LatLong.valueOf(endLat, endLon, NonSI.DEGREE_ANGLE);
 
-				startPoint = new Charger("customStart", null, null, startLoc, null, null, new HashSet<Connector>());
-				endPoint = new Charger("customEnd", null, null, endLoc, null, null, new HashSet<Connector>());
+				startPoint = new Node("customStart", null, null, startLoc, null, null, new HashSet<Connector>());
+				endPoint = new Node("customEnd", null, null, endLoc, null, null, new HashSet<Connector>());
 
 				GraphBuilder gb = new GraphBuilder(new QueryBuilder("localhost", 5000), Amount.valueOf(426, SI.KILOMETER)/*Tesla Model S 85kWh*/);
-				g = new CustomPointFolderGraph("./xml/powerCut2/", "./xml/powerCut2/nodes.xml", startPoint, endPoint, gb);
+				g = new CustomPointFolderGraph(edgeDir, nodeFile, startPoint, endPoint, gb);
 				System.out.println("third graph");
 			} else {
 				//cannot make start and end points
@@ -225,7 +228,7 @@ public class RouteServerHandler extends AbstractHandler{
 
 			//find the fastest charger in the network
 			Amount<Power> fastestCharge = Amount.valueOf(0, SI.WATT);
-			for(Charger c : g.getNodes()){
+			for(Node c : g.getNodes()){
 				for(Connector con : c.getConnectors()){
 					if(con.getPower().isGreaterThan(fastestCharge)){
 						fastestCharge = con.getPower();
@@ -234,26 +237,37 @@ public class RouteServerHandler extends AbstractHandler{
 			}
 
 			StateTimeComparator comp = new DistanceStoringAStarComparator(endPoint, Amount.valueOf(120, NonSI.KILOMETERS_PER_HOUR)/*ROI motorways*/, fastestCharge);
-			Router// router = new PowerLimitedRouter(comp, Amount.valueOf(20, SI.KILO(SI.WATT)));
-			router = new FastChargeRouter(new StateTimeComparator()/*comp*/);
-			//router = new TimeOnlyRouter(new StateTimeComparator());
+			Router router;
+			//router = new ListPrunedQueueRouter(comp);
+			router = new FastChargeRouter(comp);
+			//router = new TimeOnlyRouter(comp);
+			
 			//build a scenario
 			Scenario s = new Scenario(g, startPoint, endPoint, car);
 			//route that scenario
 			long startTime = System.currentTimeMillis();
 			State result = router.route(s);
 			long endTime = System.currentTimeMillis();
+			
+			long optimizerStart = System.currentTimeMillis();
+			State optimizedResult = ChargeOptimizer.optimize(result, g);
+			long optimizerEnd = System.currentTimeMillis();
+			
 			//display the results
 			if(result == null){
 				response.getWriter().println("<h1>Route could not be calculated</h1>");
 			} else {
 				response.getWriter().println("<h1>Route calculated:</h1>");
-				response.getWriter().println("<h3>" + result.getDistance() + "</h3>");
-				response.getWriter().println("<h3>" + result.getTime() + "</h3>");
-				response.getWriter().println("<h3>" + result.getEnergy() + "</h3>");
-				response.getWriter().println("<body>" + result.getRouteString("<br>")
-						+ "routing took " + new Double(endTime-startTime).toString() + "ms<br></body>");
-				response.getWriter().println(MapEmbed.getEmbedCode(result));
+				
+				response.getWriter().println("<h3>" + (int)optimizedResult.getDistance().doubleValue(NonSI.MILE) + "miles" + 
+						" in " + (int)optimizedResult.getTime().doubleValue(SI.SECOND) + "s" +
+						" using " + (int)car.chargeNeededToTravel(optimizedResult.getDistance()).doubleValue(SI.KILO(SI.JOULE)) + "kJ"+ "</h3>");
+				
+				response.getWriter().println("<body>" + optimizedResult.getRouteString("<br>"));
+				response.getWriter().println(MapEmbed.getEmbedCode(result) + "<br>");
+				response.getWriter().println("routing took " + new Double(endTime-startTime).toString() + "ms<br>");
+				response.getWriter().println("optimizing took " + new Double(optimizerEnd-optimizerStart).toString() + "ms</body>");
+				
 				router.printStats();
 			}
 		} else {
