@@ -5,28 +5,28 @@ import javax.measure.quantity.Length;
 
 import org.jscience.physics.amount.Amount;
 
-import Model.Charger;
+import Model.Node;
 
 public class Edge {
 
-	private Charger startPoint;
-	private Charger endPoint;
+	private Node startPoint;
+	private Node endPoint;
 	private Amount<Length> distance;
 	private Amount<Duration> time;
 	
 	
-	public Edge(Charger start, Charger end, Amount<Length> distance, Amount<Duration> time){
+	public Edge(Node start, Node end, Amount<Length> distance, Amount<Duration> time){
 		this.startPoint = start;
 		this.endPoint = end;
 		this.distance = distance;
 		this.time = time;
 	}
 	
-	public Charger getStartPoint(){
+	public Node getStartPoint(){
 		return startPoint;
 	}
 	
-	public Charger getEndPoint(){
+	public Node getEndPoint(){
 		return endPoint;
 	}
 	

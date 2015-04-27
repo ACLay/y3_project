@@ -17,33 +17,33 @@ import org.jscience.physics.amount.Amount;
 
 import registry.ChargerLoader;
 import router.Edge;
-import Model.Charger;
+import Model.Node;
 import XML.XMLedge;
 import XML.XMLedges;
 
 public class FolderGraph implements Graph{
 	
 	private String dir;
-	private HashMap<String,Charger> chargers;//Chargers, indexed by ID
+	private HashMap<String,Node> chargers;//Chargers, indexed by ID
 	
 	public FolderGraph(String edgeDirectory, String nodeFile){
 		dir = edgeDirectory;
 		
-		chargers = new HashMap<String, Charger>();
-		Collection<Charger> chargePoints = ChargerLoader.loadFromFile(nodeFile);
-		for(Charger c : chargePoints){
+		chargers = new HashMap<String, Node>();
+		Collection<Node> chargePoints = ChargerLoader.loadFromFile(nodeFile);
+		for(Node c : chargePoints){
 			chargers.put(c.getID(), c);
 		}
 	}
 
 	@Override
-	public void addNode(Charger charger) {
+	public void addNode(Node charger) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void addNodes(Collection<Charger> chargers) {
+	public void addNodes(Collection<Node> chargers) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -63,26 +63,26 @@ public class FolderGraph implements Graph{
 	}
 
 	@Override
-	public Collection<Charger> getNodes() {
+	public Collection<Node> getNodes() {
 		return chargers.values();
 	}
 
 	@Override
 	public Collection<Edge> getEdges() {
 		Collection<Edge> allEdges = new HashSet<Edge>();
-		for(Charger charger : chargers.values()){
+		for(Node charger : chargers.values()){
 			allEdges.addAll(getEdgesFrom(charger));
 		}
 		return allEdges;
 	}
 
 	@Override
-	public Collection<Edge> getEdgesFrom(Charger edgeStart) {
+	public Collection<Edge> getEdgesFrom(Node edgeStart) {
 		return loadEdges(edgeStart.getID());
 	}
 
 	@Override
-	public boolean containsNode(Charger charger) {
+	public boolean containsNode(Node charger) {
 		return chargers.containsValue(charger);
 	}
 
@@ -115,8 +115,8 @@ public class FolderGraph implements Graph{
 		
 		List<Edge> edges = new ArrayList<Edge>();
 		for(XMLedge xe : xmlEdges.getEdges()){
-			Charger startPoint = chargers.get(xe.getStartPointId());
-			Charger endPoint = chargers.get(xe.getEndPointId());
+			Node startPoint = chargers.get(xe.getStartPointId());
+			Node endPoint = chargers.get(xe.getEndPointId());
 			Edge e = new Edge(startPoint,
 					endPoint,
 					Amount.valueOf(xe.getTravelDistance(), SI.METER),

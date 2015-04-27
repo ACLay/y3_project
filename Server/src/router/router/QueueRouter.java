@@ -16,7 +16,7 @@ import router.State;
 import router.comparator.StateTimeComparator;
 import router.graph.Graph;
 import Model.Car;
-import Model.Charger;
+import Model.Node;
 
 public class QueueRouter extends Router{
 
@@ -33,8 +33,8 @@ public class QueueRouter extends Router{
 		// TODO Auto-generated method stub
 		graph = scenario.getGraph();
 
-		Charger startpoint = scenario.getStart();
-		Charger endpoint = scenario.getFinish();
+		Node startpoint = scenario.getStart();
+		Node endpoint = scenario.getFinish();
 		Car vehicle = scenario.getCar();
 
 		created = 0;

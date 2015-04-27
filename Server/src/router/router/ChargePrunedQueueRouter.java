@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import router.State;
 import router.comparator.StateTimeComparator;
-import Model.Charger;
+import Model.Node;
 
 public class ChargePrunedQueueRouter extends QueueRouter {
 	
@@ -12,7 +12,7 @@ public class ChargePrunedQueueRouter extends QueueRouter {
 		super(comparator);
 	}
 
-	HashMap<Charger, State> chargestStates = new HashMap<Charger, State>();
+	HashMap<Node, State> chargestStates = new HashMap<Node, State>();
 	
 	protected void addState(State s){
 		
@@ -29,7 +29,7 @@ public class ChargePrunedQueueRouter extends QueueRouter {
 		 * 		> add candidate (fastest may not have enough charge, this may be faster than chargiest)
 		 */
 		
-		Charger location = s.getLocation();
+		Node location = s.getLocation();
 		
 		boolean addable = false;
 		

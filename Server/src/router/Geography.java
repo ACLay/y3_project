@@ -5,13 +5,13 @@ import javax.measure.unit.SI;
 
 import org.jscience.physics.amount.Amount;
 
-import Model.Charger;
+import Model.Node;
 
 public class Geography {
 
 	final static Amount<Length> earthRadius = Amount.valueOf(6353, SI.KILOMETRE);
 	
-	public static Amount<Length> haversineDistance(Charger s1, Charger s2){
+	public static Amount<Length> haversineDistance(Node s1, Node s2){
 		double lat1 = s1.getCoordinates().latitudeValue(SI.RADIAN);
 		double lon1 = s1.getCoordinates().longitudeValue(SI.RADIAN);
 		

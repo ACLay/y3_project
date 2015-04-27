@@ -4,32 +4,32 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import router.Edge;
-import Model.Charger;
+import Model.Node;
 
 public class RamGraph implements Graph {
 
-	private Collection<Charger> nodes;
+	private Collection<Node> nodes;
 	private Collection<Edge> edges;
 	
 	public RamGraph(){
-		nodes = new HashSet<Charger>();
+		nodes = new HashSet<Node>();
 		edges = new HashSet<Edge>();
 	}
 	
-	public void addNode(Charger charger){
+	public void addNode(Node charger){
 		nodes.add(charger);
 	}
 	
-	public void addNodes(Collection<Charger> chargers){
-		for(Charger c : chargers){
+	public void addNodes(Collection<Node> chargers){
+		for(Node c : chargers){
 			nodes.add(c);
 		}
 	}
 	
 	//only add edges if their start and end points are nodes in the graph
 	public void addEdge(Edge edge){
-		Charger startPoint = edge.getStartPoint();
-		Charger endPoint = edge.getEndPoint();
+		Node startPoint = edge.getStartPoint();
+		Node endPoint = edge.getEndPoint();
 		if(nodes.contains(startPoint) && nodes.contains(endPoint)){
 			edges.add(edge);
 		}
@@ -41,7 +41,7 @@ public class RamGraph implements Graph {
 		}
 	}
 	
-	public Collection<Charger> getNodes(){
+	public Collection<Node> getNodes(){
 		return nodes;
 	}
 	
@@ -49,7 +49,7 @@ public class RamGraph implements Graph {
 		return edges;
 	}
 	
-	public Collection<Edge> getEdgesFrom(Charger edgeStart){
+	public Collection<Edge> getEdgesFrom(Node edgeStart){
 		HashSet<Edge> desired = new HashSet<Edge>();
 		for(Edge e : edges){
 			if(e.getStartPoint().equals(edgeStart)){
@@ -60,7 +60,7 @@ public class RamGraph implements Graph {
 	}
 
 	@Override
-	public boolean containsNode(Charger charger) {
+	public boolean containsNode(Node charger) {
 		return nodes.contains(charger);
 	}
 

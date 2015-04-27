@@ -19,7 +19,7 @@ import router.Scenario;
 import router.State;
 import router.comparator.StateTimeComparator;
 import Model.Car;
-import Model.Charger;
+import Model.Node;
 
 public class UberPrunedRouter extends ListPrunedQueueRouter {
 
@@ -35,8 +35,8 @@ public class UberPrunedRouter extends ListPrunedQueueRouter {
 	public State route(Scenario scenario) {
 		graph = scenario.getGraph();
 
-		Charger startpoint = scenario.getStart();
-		Charger endpoint = scenario.getFinish();
+		Node startpoint = scenario.getStart();
+		Node endpoint = scenario.getFinish();
 		Car vehicle = scenario.getCar();
 
 		created = 0;

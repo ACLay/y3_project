@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 import router.State;
 import router.comparator.StateTimeComparator;
-import Model.Charger;
+import Model.Node;
 
 public class QueuePrunedQueueRouter extends QueueRouter {
 
@@ -14,7 +14,7 @@ public class QueuePrunedQueueRouter extends QueueRouter {
 		super(comparator);
 	}
 
-	HashMap<Charger,ArrayList<State>> candidateStates = new HashMap<Charger,ArrayList<State>>();
+	HashMap<Node,ArrayList<State>> candidateStates = new HashMap<Node,ArrayList<State>>();
 	
 	protected void addState(State s){
 		created++;

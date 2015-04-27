@@ -7,7 +7,7 @@ import javax.measure.unit.NonSI;
 
 import org.jscience.geography.coordinates.LatLong;
 
-import Model.Charger;
+import Model.Node;
 
 public class QueryBuilder {
 
@@ -19,7 +19,7 @@ public class QueryBuilder {
 		this.port = port;
 	}
 	
-	public URL routeBetween(Charger start, Charger end) throws MalformedURLException{
+	public URL routeBetween(Node start, Node end) throws MalformedURLException{
 		return routeBetween(start.getCoordinates(),end.getCoordinates());
 	}
 	

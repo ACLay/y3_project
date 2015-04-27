@@ -2,16 +2,16 @@ package router;
 
 import router.graph.Graph;
 import Model.Car;
-import Model.Charger;
+import Model.Node;
 
 public class Scenario {
 	
 	protected Graph graph;
-	protected Charger start;
-	protected Charger finish;
+	protected Node start;
+	protected Node finish;
 	protected Car car;
 	
-	public Scenario(Graph g, Charger start, Charger finish, Car car){
+	public Scenario(Graph g, Node start, Node finish, Car car){
 		this.graph = g;
 		this.start = start;
 		this.finish = finish;
@@ -22,11 +22,11 @@ public class Scenario {
 		return graph;
 	}
 	
-	public Charger getStart(){
+	public Node getStart(){
 		return start;
 	}
 	
-	public Charger getFinish(){
+	public Node getFinish(){
 		return finish;
 	}
 	

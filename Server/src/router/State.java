@@ -13,18 +13,18 @@ import org.jscience.geography.coordinates.LatLong;
 import org.jscience.physics.amount.Amount;
 
 import Model.Car;
-import Model.Charger;
+import Model.Node;
 
 public class State {
 
-	private Charger location;
+	private Node location;
 	private Amount<Duration> time;
 	private Amount<Energy> energy;
 	private State previous;
 	private Amount<Length> distance;
 	private Car car;
 	
-	public State(Charger location, Amount<Duration> time, Amount<Energy> energy, State previous, Amount<Length> distance, Car car){
+	public State(Node location, Amount<Duration> time, Amount<Energy> energy, State previous, Amount<Length> distance, Car car){
 		this.location = location;
 		this.time = time;
 		this.energy = energy;
@@ -43,7 +43,7 @@ public class State {
 		return new State(location, nextTime, newLevel, this, distance, car);
 	}
 	
-	public State moveTo(Charger nextLocation, Amount<Duration> travelTime, Amount<Length> travelDistance){
+	public State moveTo(Node nextLocation, Amount<Duration> travelTime, Amount<Length> travelDistance){
 		Amount<Duration> nextTime = time.plus(travelTime);
 		Amount<Energy> nextCharge = energy.minus(car.chargeNeededToTravel(travelDistance));
 		Amount<Length> nextDistance = distance.plus(travelDistance);
@@ -52,7 +52,7 @@ public class State {
 	}
 	
 	//Accessors!
-	public Charger getLocation(){
+	public Node getLocation(){
 		return location;
 	}
 	

@@ -9,11 +9,11 @@ import org.jscience.physics.amount.Amount;
 
 import router.Geography;
 import router.State;
-import Model.Charger;
+import Model.Node;
 
 public class TravelTimeStateComparator extends AStarStateTimeComparator {
 
-	public TravelTimeStateComparator(Charger endpoint, Amount<Velocity> maxSpeed, Amount<Power> fastestCharge) {
+	public TravelTimeStateComparator(Node endpoint, Amount<Velocity> maxSpeed, Amount<Power> fastestCharge) {
 		super(endpoint, maxSpeed, fastestCharge);
 	}
 	

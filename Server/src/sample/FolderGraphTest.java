@@ -17,7 +17,7 @@ import router.graph.FolderGraph;
 import router.router.ListPrunedQueueRouter;
 import router.router.Router;
 import Model.Car;
-import Model.Charger;
+import Model.Node;
 import Model.connectors.Connector;
 
 public class FolderGraphTest {
@@ -28,17 +28,17 @@ public class FolderGraphTest {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		FolderGraph g = new FolderGraph("./xml/edges/", "./xml/edges/edited_registry.xml");
-		Collection<Charger> chargers = ChargerLoader.loadFromFile("./xml/edges/edited_registry.xml");
+		Collection<Node> chargers = ChargerLoader.loadFromFile("./xml/edges/edited_registry.xml");
 		
-		Iterator<Charger> it = chargers.iterator();
-		Charger startPoint = it.next();
+		Iterator<Node> it = chargers.iterator();
+		Node startPoint = it.next();
 		for(int i=0;i<10;i++){
 			it.next();
 		}
-		Charger endPoint = it.next();
+		Node endPoint = it.next();
 		
 		Amount<Power> mostPowerful = Amount.valueOf(0, SI.WATT);
-		for(Charger c : chargers){
+		for(Node c : chargers){
 			for (Connector con : c.getConnectors()){
 				if(con.getPower().isGreaterThan(mostPowerful)){
 					mostPowerful = con.getPower();

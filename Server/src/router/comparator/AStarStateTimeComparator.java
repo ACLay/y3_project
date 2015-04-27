@@ -12,15 +12,15 @@ import org.jscience.physics.amount.Amount;
 import router.Geography;
 import router.State;
 import Model.Car;
-import Model.Charger;
+import Model.Node;
 
 public class AStarStateTimeComparator extends StateTimeComparator{
 
-	protected Charger endpoint;
+	protected Node endpoint;
 	protected Amount<Velocity> maxSpeed;
 	protected Amount<Power> fastestCharge;
 	
-	public AStarStateTimeComparator(Charger endpoint, Amount<Velocity> maxSpeed, Amount<Power> fastestCharge){
+	public AStarStateTimeComparator(Node endpoint, Amount<Velocity> maxSpeed, Amount<Power> fastestCharge){
 		this.endpoint = endpoint;
 		this.maxSpeed = maxSpeed;
 		this.fastestCharge = fastestCharge;

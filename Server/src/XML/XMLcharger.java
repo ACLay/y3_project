@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jscience.geography.coordinates.LatLong;
 
-import Model.Charger;
+import Model.Node;
 import Model.connectors.Connector;
 
 @XmlRootElement(name = "ChargeDevice")
@@ -23,7 +23,7 @@ public class XMLcharger {
 		connectors = new ArrayList<XMLconnector>();
 	}
 	
-	public XMLcharger(Charger charger){
+	public XMLcharger(Node charger){
 		this.chargeDeviceID = charger.getID();
 		this.chargeDeviceRef = charger.getReference();
 		this.chargeDeviceName = charger.getName();
@@ -38,7 +38,7 @@ public class XMLcharger {
 		}
 	}
 	
-	public Charger makeCharger(){
+	public Node makeCharger(){
 		ArrayList<Connector> realConnectors = new ArrayList<Connector>();
 		for(XMLconnector xmlConn : connectors){
 			Connector c = xmlConn.makeConnector();
@@ -47,7 +47,7 @@ public class XMLcharger {
 			}
 		}
 		
-		return new Charger(chargeDeviceID,
+		return new Node(chargeDeviceID,
 				chargeDeviceRef,
 				chargeDeviceName,
 				LatLong.valueOf(location.latitude,location.longitude,NonSI.DEGREE_ANGLE),

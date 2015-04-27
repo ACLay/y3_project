@@ -15,7 +15,7 @@ import router.State;
 import router.comparator.StateTimeComparator;
 import router.graph.Graph;
 import Model.Car;
-import Model.Charger;
+import Model.Node;
 
 public class EdgeSelectiveRouter extends Router {
 
@@ -24,11 +24,11 @@ public class EdgeSelectiveRouter extends Router {
 	StateTimeComparator comparator;
 	
 	State fastestToEnd;
-	Map<Charger,Map<Charger,State>> minimalChargeStates;
-	Map<Charger,State> fullChargeStates;
+	Map<Node,Map<Node,State>> minimalChargeStates;
+	Map<Node,State> fullChargeStates;
 	Map<State,Integer> useCounts;
 	
-	Charger endpoint;
+	Node endpoint;
 	/*
 	 * perform charging of a state when it's added
 	 * on adding, store the number of times its used
@@ -46,15 +46,15 @@ public class EdgeSelectiveRouter extends Router {
 		// TODO Auto-generated method stub
 		graph = scenario.getGraph();
 
-		Charger startpoint = scenario.getStart();
+		Node startpoint = scenario.getStart();
 		endpoint = scenario.getFinish();
 		Car vehicle = scenario.getCar();
 
 		useCounts = new HashMap<State,Integer>();
-		fullChargeStates = new HashMap<Charger,State>();
-		minimalChargeStates = new HashMap<Charger,Map<Charger,State>>();
-		for(Charger c : graph.getNodes()){
-			minimalChargeStates.put(c, new HashMap<Charger,State>());
+		fullChargeStates = new HashMap<Node,State>();
+		minimalChargeStates = new HashMap<Node,Map<Node,State>>();
+		for(Node c : graph.getNodes()){
+			minimalChargeStates.put(c, new HashMap<Node,State>());
 		}
 		
 		created = 0;
@@ -73,7 +73,7 @@ public class EdgeSelectiveRouter extends Router {
 		while(!pq.isEmpty()){
 
 			State n = getState();
-			Charger location = n.getLocation();
+			Node location = n.getLocation();
 			if(location.equals(endpoint)){
 				return n;
 			}
@@ -91,9 +91,9 @@ public class EdgeSelectiveRouter extends Router {
 			} else {
 				int expansions = 0;
 				//if its the fastest minimal charge at a node for an edge, expand along that edge
-				Map<Charger,State> minimalCharges = minimalChargeStates.get(location);
+				Map<Node,State> minimalCharges = minimalChargeStates.get(location);
 				for(Edge edge : graph.getEdgesFrom(location)){
-					Charger edgeEnd = edge.getEndPoint();
+					Node edgeEnd = edge.getEndPoint();
 					if(n.equals(minimalCharges.get(edgeEnd))){
 						State travelled = n.moveTo(edgeEnd, edge.getTravelTime(), edge.getDistance());
 						addState(travelled);
@@ -139,7 +139,7 @@ public class EdgeSelectiveRouter extends Router {
 			}
 		}
 		//minimally charge for each edge and see if its fastest
-		Map<Charger,State> minimals = minimalChargeStates.get(s.getLocation());
+		Map<Node,State> minimals = minimalChargeStates.get(s.getLocation());
 		for(Edge e : graph.getEdgesFrom(s.getLocation())){
 			Amount<Energy> chargeNeeded  = s.getCar().chargeNeededToTravel(e.getDistance());
 			if(chargeNeeded.isGreaterThan(s.getCar().getCapacity())){

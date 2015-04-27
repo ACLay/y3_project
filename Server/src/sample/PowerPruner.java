@@ -19,7 +19,7 @@ import org.jscience.physics.amount.Amount;
 
 import router.Edge;
 import router.graph.FolderGraph;
-import Model.Charger;
+import Model.Node;
 import Model.connectors.Connector;
 import XML.XMLChargers;
 import XML.XMLcharger;
@@ -34,10 +34,10 @@ public class PowerPruner {
 		//load the original graph
 		FolderGraph g = new FolderGraph("./xml/edges/", "./xml/edges/edited_registry.xml");
 		//build a set of chargers and fast connectors
-		Set<Charger> validChargers = new HashSet<Charger>();
+		Set<Node> validChargers = new HashSet<Node>();
 		List<XMLcharger> xmlChargerList = new ArrayList<XMLcharger>();
 
-		for(Charger c : g.getNodes()){
+		for(Node c : g.getNodes()){
 			Set<Connector> highPowerConnectors = new HashSet<Connector>();
 			for(Connector con : c.getConnectors()){
 				if(con.getPower().isGreaterThan(minOutput)){
@@ -45,22 +45,22 @@ public class PowerPruner {
 				}
 			}
 			if(!highPowerConnectors.isEmpty()){
-				Charger charger = new Charger(c.getID(), c.getReference(), c.getName(), c.getCoordinates(), c.getLocationLong(), c.getLocationLong(), highPowerConnectors);
+				Node charger = new Node(c.getID(), c.getReference(), c.getName(), c.getCoordinates(), c.getLocationLong(), c.getLocationLong(), highPowerConnectors);
 				validChargers.add(charger);
 				xmlChargerList.add(new XMLcharger(c));
 				System.out.println("charger added " + charger.getConnectors().size());
 			}
 		}
 		System.out.println(validChargers.size() + " chargers");
-		Map<Charger,Set<Edge>> edgeSets = new HashMap<Charger,Set<Edge>>();
+		Map<Node,Set<Edge>> edgeSets = new HashMap<Node,Set<Edge>>();
 		//for each node in that set
-		for(Charger c : validChargers){
+		for(Node c : validChargers){
 			Set<Edge> validEdges = new HashSet<Edge>();
 			//build a reduced set of edges from it
 			Collection<Edge> edges = g.getEdgesFrom(c);
 			
 			for(Edge e : edges){
-				for(Charger c2 : validChargers){
+				for(Node c2 : validChargers){
 					if(e.getEndPoint().getID().equals(c2.getID())){
 						validEdges.add(e);
 					}
@@ -79,7 +79,7 @@ public class PowerPruner {
 		String dir = "./xml/powerCut2/";
 		String xml = ".xml";
 
-		for(Charger c : edgeSets.keySet()){
+		for(Node c : edgeSets.keySet()){
 			
 			String id = c.getID();
 			File f = new File(dir+id+xml);

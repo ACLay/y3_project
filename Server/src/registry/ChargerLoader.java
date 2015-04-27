@@ -13,7 +13,7 @@ import javax.xml.bind.Unmarshaller;
 import org.jscience.physics.amount.Amount;
 
 import router.Edge;
-import Model.Charger;
+import Model.Node;
 import OSRM.GraphBuilder;
 import OSRM.QueryBuilder;
 import XML.XMLChargers;
@@ -23,11 +23,11 @@ public class ChargerLoader {
 
 	String url = "http://chargepoints.dft.gov.uk/api/retrieve/registry/";
 
-	public static Collection<Charger> loadFromFile(String filename){
+	public static Collection<Node> loadFromFile(String filename){
 		//TODO remove p: automatically
 		
 		//load chargers
-		ArrayList<Charger> chargers = new ArrayList<Charger>();
+		ArrayList<Node> chargers = new ArrayList<Node>();
 		try {
 
 			File registry = new File(filename);
@@ -53,9 +53,9 @@ public class ChargerLoader {
 			e.printStackTrace();
 		}
 		//sanity checks
-		Iterator<Charger> it = chargers.iterator();
+		Iterator<Node> it = chargers.iterator();
 		while(it.hasNext()){
-			Charger c = it.next();
+			Node c = it.next();
 			if(c.getConnectors().isEmpty()){
 				it.remove();
 				System.err.println("Chargepoint removed");
@@ -65,16 +65,16 @@ public class ChargerLoader {
 	}
 
 	public static void main(String[] args){
-		Collection<Charger> chargers = loadFromFile("./xml/edited_registry.xml");
-		Iterator<Charger> it = chargers.iterator();
+		Collection<Node> chargers = loadFromFile("./xml/edited_registry.xml");
+		Iterator<Node> it = chargers.iterator();
 		for(int i=0; i<100; i++){
 			it.next();
 		}
-		Charger c1 = it.next();
+		Node c1 = it.next();
 		for(int i=0; i<150; i++){
 			it.next();
 		}
-		Charger c2 = it.next();
+		Node c2 = it.next();
 		
 		GraphBuilder gb = new GraphBuilder(new QueryBuilder("127.0.0.1", 5000), Amount.valueOf(426, SI.KILOMETER));
 		Edge edge;

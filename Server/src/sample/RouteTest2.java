@@ -16,7 +16,7 @@ import router.graph.RamGraph;
 import router.router.QueueRouter;
 import router.router.Router;
 import Model.Car;
-import Model.Charger;
+import Model.Node;
 import Model.connectors.Connector;
 import Model.connectors.Type;
 
@@ -37,14 +37,14 @@ public class RouteTest2 {
 		HashSet<Connector> fastConns = new HashSet<Connector>();
 		fastConns.add(new Connector(Type.IEC_TYPE_2, Amount.valueOf("3250W").to(SI.WATT), Amount.valueOf("250V").to(SI.VOLT), Amount.valueOf("13A").to(SI.AMPERE)));
 		
-		ArrayList<Charger> nodes = new ArrayList<Charger>();
-		Charger startPoint = new Charger("1","c1","start point",null,"Bag end","Hobbiton",connectors);
-		Charger endPoint = new Charger("2","c2","end point",null,"Mt. Doom","Mordor",connectors);
+		ArrayList<Node> nodes = new ArrayList<Node>();
+		Node startPoint = new Node("1","c1","start point",null,"Bag end","Hobbiton",connectors);
+		Node endPoint = new Node("2","c2","end point",null,"Mt. Doom","Mordor",connectors);
 		nodes.add(startPoint); nodes.add(endPoint);
 		
-		Charger midPoint1 = new Charger("3","c3","midpoint 1",null,"prancing pony","bree", connectors);
-		Charger midPoint2 = new Charger("4","c4","midpoint 2",null,"orthanc","isengard", medConns);
-		Charger midPoint3 = new Charger("5","c5","midpoint 3",null,"helms deep","rohan",fastConns);
+		Node midPoint1 = new Node("3","c3","midpoint 1",null,"prancing pony","bree", connectors);
+		Node midPoint2 = new Node("4","c4","midpoint 2",null,"orthanc","isengard", medConns);
+		Node midPoint3 = new Node("5","c5","midpoint 3",null,"helms deep","rohan",fastConns);
 		nodes.add(midPoint1); nodes.add(midPoint2); nodes.add(midPoint3);
 		
 		ArrayList<Edge> edges = new ArrayList<Edge>();

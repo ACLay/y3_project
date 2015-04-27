@@ -18,7 +18,7 @@ import org.jscience.physics.amount.Amount;
 import router.Edge;
 import router.graph.Graph;
 import router.graph.RamGraph;
-import Model.Charger;
+import Model.Node;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Graph")
@@ -32,7 +32,7 @@ public class XMLgraph {
 	public XMLgraph(){}
 	public XMLgraph(Graph g){
 		List<XMLcharger> xmlChargers = new ArrayList<XMLcharger>();
-		for(Charger c : g.getNodes()){
+		for(Node c : g.getNodes()){
 			xmlChargers.add(new XMLcharger(c));
 		}
 		chargers = new XMLChargers();
@@ -62,14 +62,14 @@ public class XMLgraph {
 	
 	public RamGraph makeGraph(){
 		RamGraph graph = new RamGraph();
-		Map<String,Charger> chargerIdMap = new HashMap<String,Charger>();
+		Map<String,Node> chargerIdMap = new HashMap<String,Node>();
 		for(XMLcharger charger : chargers.getChargers()){
 			chargerIdMap.put(charger.getChargeDeviceID(), charger.makeCharger());
 		}
 		Set<Edge> graphEdges = new HashSet<Edge>();
 		for(XMLedge edge : edges.getEdges()){
-			Charger startPoint = chargerIdMap.get(edge.getStartPointId());
-			Charger endPoint = chargerIdMap.get(edge.getEndPointId());
+			Node startPoint = chargerIdMap.get(edge.getStartPointId());
+			Node endPoint = chargerIdMap.get(edge.getEndPointId());
 			graphEdges.add(new Edge(startPoint, endPoint,
 					Amount.valueOf(edge.getTravelDistance(), SI.METER),
 					Amount.valueOf(edge.getTravelTime(), SI.SECOND)));

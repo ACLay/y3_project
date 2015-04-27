@@ -18,7 +18,7 @@ import router.State;
 import router.comparator.StateTimeComparator;
 import router.graph.Graph;
 import Model.Car;
-import Model.Charger;
+import Model.Node;
 
 public class PowerLimitedRouter extends ListPrunedQueueRouter{
 
@@ -33,16 +33,16 @@ public class PowerLimitedRouter extends ListPrunedQueueRouter{
 		
 		graph = scenario.getGraph();
 
-		Charger startpoint = scenario.getStart();
-		Charger endpoint = scenario.getFinish();
+		Node startpoint = scenario.getStart();
+		Node endpoint = scenario.getFinish();
 		Car vehicle = scenario.getCar();
 
 		created = 0;
 		stored = 0;
 		explored = 0;
 		
-		Set<Charger> usableChargers = new HashSet<Charger>();
-		for(Charger c : graph.getNodes()){
+		Set<Node> usableChargers = new HashSet<Node>();
+		for(Node c : graph.getNodes()){
 			if(c.maxChargeOutput(vehicle).isGreaterThan(powerLimit)){
 				usableChargers.add(c);
 			}
@@ -126,23 +126,23 @@ public class PowerLimitedRouter extends ListPrunedQueueRouter{
 		return null;
 	}
 	
-	protected boolean connected(Charger startPoint, Charger endPoint, Set<Charger> usableChargers, Graph g, Amount<Length> range){
+	protected boolean connected(Node startPoint, Node endPoint, Set<Node> usableChargers, Graph g, Amount<Length> range){
 		
 		if(startPoint.equals(endPoint)){
 			return true;
 		}
-		Set<Charger> connected = new HashSet<Charger>();
+		Set<Node> connected = new HashSet<Node>();
 		connected.add(startPoint);
-		Set<Charger> toAdd = new HashSet<Charger>();
+		Set<Node> toAdd = new HashSet<Node>();
 		toAdd.add(startPoint);
-		Set<Charger> justAdded;
+		Set<Node> justAdded;
 		do{
 			justAdded = toAdd;
-			toAdd = new HashSet<Charger>();
+			toAdd = new HashSet<Node>();
 			//get all the edges from the connected nodes
-			for(Charger c : justAdded){
+			for(Node c : justAdded){
 				for(Edge e : g.getEdgesFrom(c)){
-					Charger linked = e.getEndPoint();
+					Node linked = e.getEndPoint();
 					if(usableChargers.contains(linked) && !connected.contains(linked) && !e.getDistance().isGreaterThan(range)){
 						if(linked.equals(endPoint)){
 							return true;
@@ -152,7 +152,7 @@ public class PowerLimitedRouter extends ListPrunedQueueRouter{
 				}
 			}
 			//check for new usable chargers to add
-			for(Charger c : toAdd){
+			for(Node c : toAdd){
 				connected.add(c);
 			}
 		}while(!toAdd.isEmpty());
@@ -161,7 +161,7 @@ public class PowerLimitedRouter extends ListPrunedQueueRouter{
 	}
 	
 	protected boolean usableEdge(Edge e, Car c){
-		Charger endNode = e.getEndPoint();
+		Node endNode = e.getEndPoint();
 		Amount<Power> p = endNode.maxChargeOutput(c);
 		//it's usable if equal to or greater than the power limit
 		return p.isGreaterThan(powerLimit);

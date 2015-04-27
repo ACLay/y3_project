@@ -12,7 +12,7 @@ import org.jscience.physics.amount.Amount;
 import Model.connectors.Connector;
 
 
-public class Charger {
+public class Node {
 
 	//device id (32 hex digits, 128 bits), unique
 	private String chargeDeviceID;
@@ -30,7 +30,7 @@ public class Charger {
 	//connectors
 	private Collection<Connector> connectors;
 
-	public Charger(String id, String ref, String name, LatLong coordinates, String locationShort, String locationLong, Collection<Connector> connectors){
+	public Node(String id, String ref, String name, LatLong coordinates, String locationShort, String locationLong, Collection<Connector> connectors){
 		this.chargeDeviceID = id;
 		this.chargeDeviceRef = ref;
 		this.chargeDeviceName = name;
@@ -145,7 +145,7 @@ public class Charger {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Charger other = (Charger) obj;
+		Node other = (Node) obj;
 		if (chargeDeviceID == null) {
 			if (other.chargeDeviceID != null)
 				return false;

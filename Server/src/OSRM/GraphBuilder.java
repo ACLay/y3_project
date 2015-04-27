@@ -22,7 +22,7 @@ import registry.ChargerLoader;
 import router.Edge;
 import router.Geography;
 import web.Json;
-import Model.Charger;
+import Model.Node;
 import XML.XMLedge;
 import XML.XMLedges;
 
@@ -37,7 +37,7 @@ public class GraphBuilder {
 	}
 	
 	public static void main(String[] args){
-		Collection<Charger> chargers = ChargerLoader.loadFromFile("./xml/edited_registry.xml");
+		Collection<Node> chargers = ChargerLoader.loadFromFile("./xml/edited_registry.xml");
 		GraphBuilder gb = new GraphBuilder(new QueryBuilder("127.0.0.1",5000), Amount.valueOf(426, SI.KILOMETER));
 		long startTime = System.currentTimeMillis();
 		gb.buildGraph(chargers);//EPA range of the (85kWh) tesla model s
@@ -49,9 +49,9 @@ public class GraphBuilder {
 		return maxDistance;
 	}
 	
-	public void buildGraph(Collection<Charger> chargers){
+	public void buildGraph(Collection<Node> chargers){
 
-		Iterator<Charger> iter1 = chargers.iterator();
+		Iterator<Node> iter1 = chargers.iterator();
 		
 		int toCheck = chargers.size() * chargers.size();
 		int routesMade = 0;
@@ -61,11 +61,11 @@ public class GraphBuilder {
 		int routesTried = 0;
 		
 		while(iter1.hasNext()){
-			Charger startPoint = iter1.next();
-			Iterator<Charger> iter2 = chargers.iterator();
+			Node startPoint = iter1.next();
+			Iterator<Node> iter2 = chargers.iterator();
 			ArrayList<XMLedge> xEdges = new ArrayList<XMLedge>();
 			while(iter2.hasNext()){
-				Charger endPoint = iter2.next();
+				Node endPoint = iter2.next();
 				if(routesTried%1000 == 0){
 					System.out.println(routesTried + " / " + toCheck);
 				}
@@ -118,7 +118,7 @@ public class GraphBuilder {
 		System.out.println(tooLongPost + " too far to drive");
 	}
 
-	public Edge makeEdge(Charger startPoint, Charger endPoint) throws UnroutableException, MalformedURLException, IOException, JSONException{
+	public Edge makeEdge(Node startPoint, Node endPoint) throws UnroutableException, MalformedURLException, IOException, JSONException{
 		URL url;
 		try {
 			url = qb.routeBetween(startPoint, endPoint);

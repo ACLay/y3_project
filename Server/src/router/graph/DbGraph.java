@@ -3,18 +3,18 @@ package router.graph;
 import java.util.Collection;
 
 import router.Edge;
-import Model.Charger;
+import Model.Node;
 
 public class DbGraph implements Graph {
 
 	@Override
-	public void addNode(Charger charger) {
+	public void addNode(Node charger) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void addNodes(Collection<Charger> chargers) {
+	public void addNodes(Collection<Node> chargers) {
 		// TODO Auto-generated method stub
 
 	}
@@ -32,7 +32,7 @@ public class DbGraph implements Graph {
 	}
 
 	@Override
-	public Collection<Charger> getNodes() {
+	public Collection<Node> getNodes() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -44,13 +44,13 @@ public class DbGraph implements Graph {
 	}
 
 	@Override
-	public Collection<Edge> getEdgesFrom(Charger edgeStart) {
+	public Collection<Edge> getEdgesFrom(Node edgeStart) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean containsNode(Charger charger) {
+	public boolean containsNode(Node charger) {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -18,13 +18,13 @@ import router.State;
 import router.comparator.StateTimeComparator;
 import router.graph.Graph;
 import Model.Car;
-import Model.Charger;
+import Model.Node;
 
 public class MapRouter extends Router{
 
 	Graph graph;
 	PriorityQueue<State> pq;
-	HashMap<Charger, ArrayList<State>> candidateMapping;
+	HashMap<Node, ArrayList<State>> candidateMapping;
 
 	
 	@Override
@@ -32,14 +32,14 @@ public class MapRouter extends Router{
 		
 		graph = scenario.getGraph();
 		
-		Charger startpoint = scenario.getStart();
-		Charger endpoint = scenario.getFinish();
+		Node startpoint = scenario.getStart();
+		Node endpoint = scenario.getFinish();
 		Car vehicle = scenario.getCar();
 		
 		created = 0;
 		explored = 0;
 
-		candidateMapping = new HashMap<Charger, ArrayList<State>>();
+		candidateMapping = new HashMap<Node, ArrayList<State>>();
 		pq = new PriorityQueue<State>(3,new StateTimeComparator());
 		if(!(graph.containsNode(startpoint) && graph.containsNode(endpoint))){
 			return null;
@@ -116,7 +116,7 @@ public class MapRouter extends Router{
 	
 	private void addState(State s){
 		created++;
-		Charger c = s.getLocation();
+		Node c = s.getLocation();
 		if (candidateMapping.containsKey(c)){
 			ArrayList<State> states = candidateMapping.get(c);
 			for(int i=0; i<states.size(); i++){
@@ -160,7 +160,7 @@ public class MapRouter extends Router{
 	private State getState(){
 		//TODO is is more efficient to remove processed states from the candidate mapping?
 		State s = pq.poll();
-		Charger c = s.getLocation();
+		Node c = s.getLocation();
 		ArrayList<State> states = candidateMapping.get(c);
 		states.remove(s);
 		if(states.size() == 0){

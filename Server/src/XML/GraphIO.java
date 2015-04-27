@@ -14,7 +14,7 @@ import org.jscience.physics.amount.Amount;
 import router.ManhattenScenario;
 import router.graph.Graph;
 import router.graph.RamGraph;
-import Model.Charger;
+import Model.Node;
 
 public class GraphIO {
 
@@ -27,8 +27,8 @@ public class GraphIO {
 		saveGraph(ms.getGraph(), "./testGraph.xml");
 		Graph loaded = loadGraph("./testGraph.xml");
 		
-		Charger c = ms.getGraph().getNodes().iterator().next();
-		for(Charger c2: loaded.getNodes()){
+		Node c = ms.getGraph().getNodes().iterator().next();
+		for(Node c2: loaded.getNodes()){
 			boolean result = c.equals(c2);
 			if(result){
 				System.out.println(result);

@@ -8,7 +8,7 @@ import java.util.Set;
 
 import router.Edge;
 import router.Geography;
-import Model.Charger;
+import Model.Node;
 import OSRM.GraphBuilder;
 
 public class CustomPointFolderGraph extends FolderGraph {
@@ -16,12 +16,12 @@ public class CustomPointFolderGraph extends FolderGraph {
 	private Map<String, Edge> edgesToEnd;
 	private Set<Edge> edgesFromStart;
 	
-	private Charger startNode;
-	private Charger endNode;
+	private Node startNode;
+	private Node endNode;
 	
 	private GraphBuilder gb;
 	
-	public CustomPointFolderGraph(String edgeDirectory, String nodeFile, Charger startPoint, Charger endPoint, GraphBuilder gb) {
+	public CustomPointFolderGraph(String edgeDirectory, String nodeFile, Node startPoint, Node endPoint, GraphBuilder gb) {
 		super(edgeDirectory, nodeFile);
 		this.gb = gb;
 		this.startNode = startPoint;
@@ -30,7 +30,7 @@ public class CustomPointFolderGraph extends FolderGraph {
 		edgesFromStart = new HashSet<Edge>();
 		if(!super.containsNode(startPoint)){
 			
-			for(Charger c : getNodes()){
+			for(Node c : getNodes()){
 				Edge edge = makeEdge(startPoint, c);
 				if(edge != null){
 					edgesFromStart.add(edge);
@@ -42,7 +42,7 @@ public class CustomPointFolderGraph extends FolderGraph {
 		edgesToEnd = new HashMap<String, Edge>();
 		if(!super.containsNode(endPoint)){
 			
-			for(Charger c : getNodes()){
+			for(Node c : getNodes()){
 				Edge edge = makeEdge(c, endPoint);
 				if(edge != null){
 					edgesToEnd.put(c.getID(),edge);
@@ -60,7 +60,7 @@ public class CustomPointFolderGraph extends FolderGraph {
 		}
 	}
 	
-	private Edge makeEdge(Charger startPoint, Charger endPoint){
+	private Edge makeEdge(Node startPoint, Node endPoint){
 		
 		if(Geography.haversineDistance(startPoint, endPoint).isGreaterThan(gb.getMaxDistance())){
 			return null;
@@ -84,7 +84,7 @@ public class CustomPointFolderGraph extends FolderGraph {
 	}
 	
 	//when getting nodes from a point, include freshly generated ones
-	public Collection<Edge> getEdgesFrom(Charger edgeStart) {
+	public Collection<Edge> getEdgesFrom(Node edgeStart) {
 		//if it's a pre-existing node, include the new edge to the finish node
 		if(super.containsNode(edgeStart)){
 			Collection<Edge> edges = super.getEdgesFrom(edgeStart);
@@ -100,7 +100,7 @@ public class CustomPointFolderGraph extends FolderGraph {
 		}
 	}
 	
-	public boolean containsNode(Charger charger){
+	public boolean containsNode(Node charger){
 		if(startNode.equals(charger)){
 			return true;
 		} else if (endNode.equals(charger)){

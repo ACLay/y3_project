@@ -3,26 +3,26 @@ package router.graph;
 import java.util.Collection;
 
 import router.Edge;
-import Model.Charger;
+import Model.Node;
 
 public interface Graph {
 	
-	public void addNode(Charger charger);
+	public void addNode(Node charger);
 	
-	public void addNodes(Collection<Charger> chargers);
+	public void addNodes(Collection<Node> chargers);
 	
 	//only add edges if their start and end points are nodes in the graph
 	public void addEdge(Edge edge);
 	
 	public void addEdges(Collection<Edge> edges);
 	
-	public Collection<Charger> getNodes();
+	public Collection<Node> getNodes();
 	
 	public Collection<Edge> getEdges();
 	
-	public Collection<Edge> getEdgesFrom(Charger edgeStart);
+	public Collection<Edge> getEdgesFrom(Node edgeStart);
 	
-	public boolean containsNode(Charger charger);
+	public boolean containsNode(Node charger);
 	
 	public boolean containsEdge(Edge edge);
 }

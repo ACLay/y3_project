@@ -12,14 +12,14 @@ import org.jscience.physics.amount.Amount;
 
 import router.Geography;
 import router.State;
-import Model.Charger;
+import Model.Node;
 
 public class DistanceStoringAStarComparator extends AStarStateTimeComparator{
 
-	Map<Charger, Amount<Length>> distances = new HashMap<Charger, Amount<Length>>();
+	Map<Node, Amount<Length>> distances = new HashMap<Node, Amount<Length>>();
 	
 	
-	public DistanceStoringAStarComparator(Charger endpoint, Amount<Velocity> maxSpeed, Amount<Power> fastestCharge){
+	public DistanceStoringAStarComparator(Node endpoint, Amount<Velocity> maxSpeed, Amount<Power> fastestCharge){
 		super(endpoint,maxSpeed,fastestCharge);
 	}
 	

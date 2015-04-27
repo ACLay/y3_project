@@ -7,7 +7,7 @@ import java.util.Set;
 
 import router.State;
 import router.comparator.StateTimeComparator;
-import Model.Charger;
+import Model.Node;
 
 public class ListPrunedQueueRouter extends QueueRouter {
 	//TODO remove successors to inferior states
@@ -15,7 +15,7 @@ public class ListPrunedQueueRouter extends QueueRouter {
 		super(comparator);
 	}
 
-	HashMap<Charger,ArrayList<State>> candidateStates = new HashMap<Charger,ArrayList<State>>();
+	HashMap<Node,ArrayList<State>> candidateStates = new HashMap<Node,ArrayList<State>>();
 	Set<State> inferiors = new HashSet<State>();
 	long dropped = 0;
 	
