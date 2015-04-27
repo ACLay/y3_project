@@ -10,7 +10,6 @@ import javax.measure.unit.SI;
 import org.jscience.physics.amount.Amount;
 
 import router.Manhatten2;
-import router.State;
 import router.comparator.StateTimeComparator;
 import router.router.ListPrunedQueueRouter;
 import router.router.Router;
@@ -45,13 +44,13 @@ public class ComplexityCruncher {
 				//route it with a normal and electric vehicle
 				TimeOnlyRouter petrolRouter = new TimeOnlyRouter(new StateTimeComparator());
 				long startTime = System.currentTimeMillis();
-				State petrolResult = petrolRouter.route(ms);
+				petrolRouter.route(ms);
 				long endTime = System.currentTimeMillis();
 				long petrolTime = endTime - startTime;
 
 				Router evRouter = new ListPrunedQueueRouter(new StateTimeComparator());
 				startTime = System.currentTimeMillis();
-				State evResult = evRouter.route(ms);
+				evRouter.route(ms);
 				endTime = System.currentTimeMillis();
 				long evTime = endTime - startTime;
 
