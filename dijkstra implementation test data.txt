@@ -1,0 +1,63 @@
+St Ives to John O' Groats
+Power pruned graph
+
+DIJKSTRA'S ALGORITHM
+TIME ONLY (NEW SET METHOD) average 1682ms
+824miles in 50183s using -645499kJ
+
+2277ms
+35452 created
+1004 stored
+331 explored
+
+1743ms
+ditto
+
+1687ms
+ditto
+
+1516ms
+ditto
+
+1186
+ditto
+
+TIME ONLY (OLD PQ METHOD) average 2045ms
+824miles in 50183s using -645499kJ
+
+3323ms
+34826 created
+955 stored
+311 explored
+
+2164ms
+ditto
+
+1808ms
+ditto
+
+1501ms
+ditto
+
+1428
+ditto
+
+FAST CHARGE (NEW SET METHOD) average 1639ms
+824miles in 65287s using 3959kJ
+
+2653ms
+24400 created
+1725 stored
+211 explored
+
+1731ms
+ditto
+
+1387ms
+ditto
+
+1255ms
+ditto
+
+1171ms
+ditto
