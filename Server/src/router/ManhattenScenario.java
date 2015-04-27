@@ -10,14 +10,11 @@ import org.jscience.geography.coordinates.LatLong;
 import org.jscience.physics.amount.Amount;
 
 import router.comparator.AStarStateTimeComparator;
-import router.comparator.DistanceStoringAStarComparator;
-import router.comparator.StateTimeComparator;
 import router.graph.RamGraph;
 import router.router.ListPrunedQueueRouter;
 import router.router.Router;
-import router.router.UberPrunedRouter;
 import Model.Car;
-import Model.Charger;
+import Model.Node;
 import Model.connectors.Connector;
 
 public class ManhattenScenario extends Scenario {
@@ -35,10 +32,10 @@ public class ManhattenScenario extends Scenario {
 
 		System.out.println("Routing");
 
-		StateTimeComparator tComp = new StateTimeComparator();
+		//StateTimeComparator tComp = new StateTimeComparator();
 		
 		Amount<Power> fastest = Amount.valueOf(Double.MIN_VALUE, SI.WATT);
-		for(Charger charger : rm.getGraph().getNodes()){
+		for(Node charger : rm.getGraph().getNodes()){
 			Amount<Power> chargerBest = charger.maxChargeOutput(car);
 			if(chargerBest.isGreaterThan(fastest)){
 				fastest = chargerBest;
@@ -46,7 +43,7 @@ public class ManhattenScenario extends Scenario {
 		}
 		
 		AStarStateTimeComparator heurComp = new AStarStateTimeComparator(rm.getFinish(), Amount.valueOf(30, NonSI.MILES_PER_HOUR), fastest);
-		DistanceStoringAStarComparator dsComp = new DistanceStoringAStarComparator(rm.getFinish(), Amount.valueOf(30, NonSI.MILES_PER_HOUR), fastest);
+		//DistanceStoringAStarComparator dsComp = new DistanceStoringAStarComparator(rm.getFinish(), Amount.valueOf(30, NonSI.MILES_PER_HOUR), fastest);
 		
 		Router[] routers = new Router[]{
 				/*new DualPrunedQueueRouter(tComp),
@@ -76,16 +73,16 @@ public class ManhattenScenario extends Scenario {
 		
 		super(new RamGraph(), null, null, vehicle);
 
-		ArrayList<ArrayList<Charger>> chargers = new ArrayList<ArrayList<Charger>>();
+		ArrayList<ArrayList<Node>> chargers = new ArrayList<ArrayList<Node>>();
 		//Build the nodes
 		for(int i=0; i< width; i++){
-			ArrayList<Charger> row = new ArrayList<Charger>();
+			ArrayList<Node> row = new ArrayList<Node>();
 			for(int j=0; j<length; j++){
 				String id = i + "," + j;
 				double lat = (0.5*i)/6353;
 				double lon = (0.5*j)/6353;
 				LatLong coordinates = LatLong.valueOf(lat, lon, SI.RADIAN);
-				row.add(new Charger(id, id, id, coordinates, id, id, Connector.getNewCollection(chargerP, true)));
+				row.add(new Node(id, id, id, coordinates, id, id, Connector.getNewCollection(chargerP, true)));
 			}
 			chargers.add(row);
 			graph.addNodes(row);
